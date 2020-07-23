@@ -20,9 +20,7 @@ namespace RobotGA_Project.GASolution
             {
                 binaryString = binaryString.Insert(0, "0");
             }
-
             return binaryString;
-            
         }
 
         public static int ConvertBinaryStringToInt(string pBinaryValue)
