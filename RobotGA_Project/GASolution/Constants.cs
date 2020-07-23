@@ -13,6 +13,8 @@ namespace RobotGA_Project.GASolution
 
         public static int GenotypeMinvalue = 0;
         public static int GenotypeMaxValue = (int)Math.Pow(2,ChromosomeSize);
+
+        public static int MutationProbability = 10;
         
         // Terrain types
 
