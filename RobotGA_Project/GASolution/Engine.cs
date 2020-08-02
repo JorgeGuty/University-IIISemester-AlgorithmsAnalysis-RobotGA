@@ -4,11 +4,13 @@
     {
         
         public int MaxTerrainDifficulty { get; set; }
+        public int Cost { get; set; }
         
 
-        public Engine(Terrain pMaxTerrainDifficulty)
+        public Engine(Terrain pMaxTerrainDifficulty, int pCost)
         {
             MaxTerrainDifficulty = pMaxTerrainDifficulty.DifficultyLevel;
+            Cost = pCost;
         }
         
     }

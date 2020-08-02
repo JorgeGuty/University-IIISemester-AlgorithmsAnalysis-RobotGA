@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Security.Permissions;
 using System.Text;
 
@@ -22,6 +23,10 @@ namespace RobotGA_Project.GASolution
         public Robot ParentA { get; set; }
         
         public Robot ParentB { get; set; }
+        
+        public int TotalCost { get; set; }
+        
+        public List<Terrain> Route { get; set; }
 
         public Robot(Robot pParentA, Robot pParentB)
         {
@@ -33,6 +38,7 @@ namespace RobotGA_Project.GASolution
             ParentA = pParentA;
             ParentB = pParentB;
 
+            //  Sets genotypes with the given genetic material.
             CameraGenotype = MixGeneticMaterial(pParentA.CameraGenotype, pParentB.CameraGenotype);
             BatteryGenotype = MixGeneticMaterial(pParentA.BatteryGenotype, pParentB.BatteryGenotype);;
             EngineGenotype = MixGeneticMaterial(pParentA.EngineGenotype, pParentB.EngineGenotype);;
@@ -50,6 +56,7 @@ namespace RobotGA_Project.GASolution
             ParentA = null;  // Diosito
             ParentB = null;  // La quinceañera
             
+            // Sets random initial genotypes.
             CameraGenotype = MathematicalOperations.RandomIntegerInRange(Constants.GenotypeMinvalue, Constants.GenotypeMaxValue);
             BatteryGenotype = MathematicalOperations.RandomIntegerInRange(Constants.GenotypeMinvalue, Constants.GenotypeMaxValue);;
             EngineGenotype = MathematicalOperations.RandomIntegerInRange(Constants.GenotypeMinvalue, Constants.GenotypeMaxValue);;
@@ -65,9 +72,15 @@ namespace RobotGA_Project.GASolution
             int minValue = Constants.GenotypeMinvalue;
             int maxValue = Constants.GenotypeMaxValue;
             
+            // With the given genotypes, gets the phenotype represented by each of them.
             SetBattery(minValue,maxValue);
             SetCamera(minValue,maxValue);
             SetEngine(minValue,maxValue);
+
+            // Add the costs of all pieces of hardware to get the total cost of the robot.
+            TotalCost = Battery.Cost + Engine.Cost + Camera.Cost;
+            
+            Route = new List<Terrain>();
         }
 
         private void SetEngine(int pMinValue, int pMaxValue)
@@ -129,7 +142,7 @@ namespace RobotGA_Project.GASolution
         public int CalculateFitness()
         {
             /*
-             * Function set to calculate an individual fitness
+             * Function set to calculate the fitness of an individual
              */
             
             return 0;
@@ -201,15 +214,16 @@ namespace RobotGA_Project.GASolution
             Console.WriteLine(pChromosome);
             return pChromosome;
         }
-
+        
+        
 
         public override string ToString()
         {
             string stringObject;
 
-            stringObject = "Rango de Cámara: " + Camera.Range;
-            stringObject += "Carga de Batería: " + Battery.Energy;
-            stringObject += "Capacidad de Motor: " + Engine.MaxTerrainDifficulty;
+            stringObject = "Rango de Cámara: " + Camera.Range + "    ";
+            stringObject += "Carga de Batería: " + Battery.Energy + "    ";
+            stringObject += "Capacidad de Motor: " + Engine.MaxTerrainDifficulty+ "    ";
             
             return stringObject;
 
