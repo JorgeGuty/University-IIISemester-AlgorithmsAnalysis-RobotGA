@@ -11,7 +11,6 @@ namespace RobotGA_Project.GASolution
         public Battery Battery { get; set; }
         public Camera Camera { get; set; }
         public Engine Engine { get; set; }
-        
         public int BatteryGenotype { get; }
         
         public int CameraGenotype { get; }
@@ -30,6 +29,7 @@ namespace RobotGA_Project.GASolution
 
         public Robot(Robot pParentA, Robot pParentB)
         {
+            
             /*
              * Method that initializes a Robot with two predecessors.
              * Uses genetic material mixing.
@@ -101,7 +101,6 @@ namespace RobotGA_Project.GASolution
                 Engine = Constants.BigEngine;
             }
         }
-        
         private void SetCamera(int pMinValue, int pMaxValue)
         {
 
@@ -120,7 +119,6 @@ namespace RobotGA_Project.GASolution
                 Camera = Constants.BigCamera;
             }
         }
-
         private void SetBattery(int pMinValue, int pMaxValue)
         {
             int interval = pMaxValue / Constants.BatteryTypeQuantity;
@@ -144,10 +142,12 @@ namespace RobotGA_Project.GASolution
             /*
              * Function set to calculate the fitness of an individual
              */
+
+            int worstFitnessPossible = Constants.MaxEnergyPossible + Constants.MaxEnergyPerStepPossible +
+                             Constants.MaxPossibleCost + Constants.MaxFinalDistancePossible;
             
             return 0;
         }
-        
         
         public int MixGeneticMaterial(int pGenotypeA, int pGenotypeB)
         {
@@ -171,12 +171,14 @@ namespace RobotGA_Project.GASolution
             string childChromosome = chromosomeAPart + chromosomeBPart;
 
             int mutationChance = MathematicalOperations.RandomIntegerInRange(0, 100);
+            
             if (mutationChance <= Constants.MutationProbability)
             {
                 Console.WriteLine("Mutated");
                 childChromosome = Mutate(childChromosome);
                 Console.WriteLine();
             }
+            
             Console.WriteLine("Child Chromosome:");
             Console.WriteLine(childChromosome);
             Console.WriteLine();
