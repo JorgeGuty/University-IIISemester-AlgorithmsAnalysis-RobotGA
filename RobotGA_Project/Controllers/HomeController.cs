@@ -14,12 +14,20 @@ namespace RobotGA_Project.Controllers
             
             Robot testbot = new Robot();
             Robot robota = new Robot();
+            Console.WriteLine(testbot.ToString());
+            Console.WriteLine(robota.ToString());
 
-            Robot robito = new Robot(testbot, robota);
+            Robot robito = new Robot(testbot, robota, 10);
             Console.WriteLine(robito.ToString());
             
-            return View();
+            robito = new Robot(robota, testbot, 10);
+            Console.WriteLine(robito.ToString());
+            robito.CalculateFitness();
             
+            Console.WriteLine(robito.Fitness);
+            //*/
+            Console.WriteLine(Constants.MaxEnergyPerStepPossible);
+            return View();
         }
 
         public ActionResult About()

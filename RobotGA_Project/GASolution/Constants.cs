@@ -9,7 +9,9 @@ namespace RobotGA_Project.GASolution
          * All constant quantities open for changes.
          */
 
-        public static readonly int ChromosomeSize = 8; // Size measured in bits quantity 
+        public static readonly int ChromosomeSize = 8; // Size measured in bits quantity
+
+        public static readonly int ChromosomeQuantity = 3;
 
         public static readonly int GenotypeMinvalue = 0;
         public static readonly int GenotypeMaxValue = (int)Math.Pow(2,ChromosomeSize);
@@ -54,25 +56,30 @@ namespace RobotGA_Project.GASolution
         public static readonly Engine BigEngine    = new Engine(DifficultTerrain, BasicCost + 2 * EngineCostIncrement);
         
         
-        
         // Camera Constants
         
         public static readonly int CameraTypeQuantity = 3;
         public static readonly int BasicRange = 1;
+        public static readonly int CameraEnergyConsumptionIncrement = 1;
         public static readonly int CameraCostIncrement = 1;
         
         public static readonly int CameraMaxCost = (CameraTypeQuantity * CameraCostIncrement) + BasicCost;
         
         // Camera types
         
+        //  Starts in zero consumption because basic model doesn't consume additional energy
         public static readonly Camera SmallCamera =
-            new Camera(BasicRange, BasicEnergyConsumption, BasicCost);
+            new Camera(BasicRange, 0, BasicCost); 
         
         public static readonly Camera MediumCamera = 
-            new Camera(BasicRange+1, BasicEnergyConsumption + 1, BasicCost + CameraCostIncrement);
+            new Camera(BasicRange + 1, 
+                       CameraEnergyConsumptionIncrement, 
+                       BasicCost + CameraCostIncrement);
         
         public static readonly Camera BigCamera = 
-            new Camera(BasicRange+2, BasicEnergyConsumption + 2, BasicCost + 2 * CameraCostIncrement);
+            new Camera(BasicRange + 2, 
+                       2 * CameraEnergyConsumptionIncrement, 
+                       BasicCost + 2 * CameraCostIncrement);
         
         
         // Battery Constants
@@ -80,7 +87,7 @@ namespace RobotGA_Project.GASolution
         public static readonly int BatteryTypeQuantity = 3;
         public static readonly int BasicEnergy = 50;
         public static readonly int EnergyIncrement = 20;
-        public static readonly int BatteryCostIncrement = 1;
+        public static readonly int BatteryCostIncrement = 3;
         
         public static readonly int BatteryMaxCost = (BatteryTypeQuantity * BatteryCostIncrement) + BasicCost;
         
@@ -98,10 +105,17 @@ namespace RobotGA_Project.GASolution
         
         // Fitness Constants
 
-        public static int MaxFinalDistancePossible = MapDimensions * (int) Math.Sqrt(2);
-        public static int MaxEnergyPossible = (BatteryTypeQuantity * EnergyIncrement) + BasicEnergy;
-        public static int MaxEnergyPerStepPossible = PassableTerrainTypeQuantity * TerrainEnergyConsumptionIncrement;
-        public static int MaxPossibleCost = BatteryMaxCost + CameraMaxCost + EngineMaxCost;
+        public static readonly int FitnessCriteriaQuantity = 4;
+
+        public static readonly int MaxFinalDistancePossible = MapDimensions * (int) Math.Sqrt(2);
+        
+        public static readonly int MaxEnergyPossible = (BatteryTypeQuantity - 1 ) * EnergyIncrement + BasicEnergy;
+        
+        public static readonly int MaxEnergyPerStepPossible = 
+            (PassableTerrainTypeQuantity - 1) * TerrainEnergyConsumptionIncrement + BasicEnergyConsumption + 
+            (CameraTypeQuantity - 1) * CameraEnergyConsumptionIncrement;
+        
+        public static readonly int MaxCostPossible = BatteryMaxCost + CameraMaxCost + EngineMaxCost;
         
     }
 }

@@ -125,6 +125,7 @@
     <Compile Include="GASolution\Camera.cs" />
     <Compile Include="GASolution\Generation.cs" />
     <Compile Include="GASolution\Constants.cs" />
+    <Compile Include="GASolution\GeneticOperations.cs" />
     <Compile Include="GASolution\MathematicalOperations.cs" />
     <Compile Include="GASolution\Robot.cs" />
     <Compile Include="GASolution\Terrain.cs" />

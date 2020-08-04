@@ -11,11 +11,12 @@ namespace RobotGA_Project.GASolution
         public Battery Battery { get; set; }
         public Camera Camera { get; set; }
         public Engine Engine { get; set; }
-        public int BatteryGenotype { get; }
         
-        public int CameraGenotype { get; }
+        public int BatteryGenotype { get; set; }
+        public int CameraGenotype { get; set; }
+        public int EngineGenotype { get; set; }
         
-        public int EngineGenotype { get; }
+        public string CompleteHardwareChromosome { get; set; }
         
         public int Fitness { get; set; }
         
@@ -27,7 +28,7 @@ namespace RobotGA_Project.GASolution
         
         public List<Terrain> Route { get; set; }
 
-        public Robot(Robot pParentA, Robot pParentB)
+        public Robot(Robot pParentA, Robot pParentB, int pPartitionIndex)
         {
             
             /*
@@ -39,10 +40,10 @@ namespace RobotGA_Project.GASolution
             ParentB = pParentB;
 
             //  Sets genotypes with the given genetic material.
-            CameraGenotype = MixGeneticMaterial(pParentA.CameraGenotype, pParentB.CameraGenotype);
-            BatteryGenotype = MixGeneticMaterial(pParentA.BatteryGenotype, pParentB.BatteryGenotype);;
-            EngineGenotype = MixGeneticMaterial(pParentA.EngineGenotype, pParentB.EngineGenotype);;
+            CompleteHardwareChromosome = GeneticOperations.MixGeneticMaterial(pParentA.CompleteHardwareChromosome, pParentB.CompleteHardwareChromosome, pPartitionIndex);
 
+            SetHardwareGenotypes();
+            
             InitializeFields();
             
         }
@@ -54,13 +55,20 @@ namespace RobotGA_Project.GASolution
              */
             
             ParentA = null;  // Diosito
-            ParentB = null;  // La quinceañera
+            ParentB = null;  // La virgencita
             
             // Sets random initial genotypes.
             CameraGenotype = MathematicalOperations.RandomIntegerInRange(Constants.GenotypeMinvalue, Constants.GenotypeMaxValue);
             BatteryGenotype = MathematicalOperations.RandomIntegerInRange(Constants.GenotypeMinvalue, Constants.GenotypeMaxValue);;
             EngineGenotype = MathematicalOperations.RandomIntegerInRange(Constants.GenotypeMinvalue, Constants.GenotypeMaxValue);;
 
+            string batteryChromosome = MathematicalOperations.ConvertIntToBinaryString(BatteryGenotype);
+            string cameraChromosome = MathematicalOperations.ConvertIntToBinaryString(CameraGenotype);
+            string engineChromosome = MathematicalOperations.ConvertIntToBinaryString(EngineGenotype);
+
+            // IMPORTANT: The order of the chromosomes in the complete chromosome must stay the same !!!
+            CompleteHardwareChromosome = batteryChromosome + cameraChromosome + engineChromosome;
+            
             InitializeFields();
             
         }
@@ -82,6 +90,21 @@ namespace RobotGA_Project.GASolution
             
             Route = new List<Terrain>();
         }
+        
+        private void SetHardwareGenotypes()
+        {
+            string batteryChromosome = CompleteHardwareChromosome.Substring(0, Constants.ChromosomeSize);
+            string cameraChromosome =
+                CompleteHardwareChromosome.Substring(Constants.ChromosomeSize, Constants.ChromosomeSize);
+            string engineChromosome =
+                CompleteHardwareChromosome.Substring(2 * Constants.ChromosomeSize, Constants.ChromosomeSize);
+
+            BatteryGenotype = MathematicalOperations.ConvertBinaryStringToInt(batteryChromosome);
+            CameraGenotype = MathematicalOperations.ConvertBinaryStringToInt(cameraChromosome);
+            EngineGenotype = MathematicalOperations.ConvertBinaryStringToInt(engineChromosome);
+
+        }
+
 
         private void SetEngine(int pMinValue, int pMaxValue)
         {
@@ -137,87 +160,48 @@ namespace RobotGA_Project.GASolution
             }
         }
 
-        public int CalculateFitness()
+        public void CalculateFitness()
         {
+            
             /*
              * Function set to calculate the fitness of an individual
              */
 
-            int worstFitnessPossible = Constants.MaxEnergyPossible + Constants.MaxEnergyPerStepPossible +
-                             Constants.MaxPossibleCost + Constants.MaxFinalDistancePossible;
+            int randomDistanceToGoal =
+                MathematicalOperations.RandomIntegerInRange(0, Constants.MaxFinalDistancePossible);
+            //Console.WriteLine(randomDistanceToGoal);
+            int distanceScore = 
+                GeneticOperations.NormalizeFitnessScore(randomDistanceToGoal, Constants.MaxFinalDistancePossible);
+            //Console.WriteLine(distanceScore);
+            int randomStepsForward = 
+                MathematicalOperations.RandomIntegerInRange(0, Constants.MaxEnergyPossible);
+            //Console.WriteLine(randomStepsForward);
+            int stepsScore = GeneticOperations.NormalizeFitnessScore(randomStepsForward, Constants.MaxEnergyPossible);
+            //Console.WriteLine(stepsScore);
+            int randomEnergyPerStep =
+                MathematicalOperations.RandomIntegerInRange(0, Constants.MaxEnergyPerStepPossible);
+            //Console.WriteLine(randomEnergyPerStep);
+            int energyScore =
+                GeneticOperations.NormalizeFitnessScore(randomEnergyPerStep, Constants.MaxEnergyPerStepPossible);
+            //Console.WriteLine(energyScore);
+            int costScore = GeneticOperations.NormalizeFitnessScore(TotalCost, Constants.MaxCostPossible);
+            //Console.WriteLine(costScore);
+
+            Fitness = distanceScore + stepsScore + energyScore + costScore;
             
-            return 0;
         }
         
-        public int MixGeneticMaterial(int pGenotypeA, int pGenotypeB)
+        public void Mutate()
         {
+            int minValue = Constants.GenotypeMinvalue;
+            int maxValue = Constants.GenotypeMaxValue;
             
-            string chromosomeA = MathematicalOperations.ConvertIntToBinaryString(pGenotypeA);
-            string chromosomeB = MathematicalOperations.ConvertIntToBinaryString(pGenotypeB);
+            SetHardwareGenotypes();
             
-            int partitionIndex = MathematicalOperations.RandomIntegerInRange(1, 
-                Constants.ChromosomeSize);
-            
-            string chromosomeAPart = chromosomeA.Substring(0, partitionIndex);
-            Console.WriteLine("ChromosomeA Part");
-            Console.WriteLine(chromosomeAPart);
-            Console.WriteLine();
-            
-            string chromosomeBPart = chromosomeB.Substring(partitionIndex, Constants.ChromosomeSize - partitionIndex);
-            Console.WriteLine("ChromosomeB Part");
-            Console.WriteLine(chromosomeBPart);
-            Console.WriteLine();
-
-            string childChromosome = chromosomeAPart + chromosomeBPart;
-
-            int mutationChance = MathematicalOperations.RandomIntegerInRange(0, 100);
-            
-            if (mutationChance <= Constants.MutationProbability)
-            {
-                Console.WriteLine("Mutated");
-                childChromosome = Mutate(childChromosome);
-                Console.WriteLine();
-            }
-            
-            Console.WriteLine("Child Chromosome:");
-            Console.WriteLine(childChromosome);
-            Console.WriteLine();
-            
-            int childGenotype = MathematicalOperations.ConvertBinaryStringToInt(childChromosome);
-            
-            return childGenotype;
-
+            SetBattery(minValue,maxValue);
+            SetCamera(minValue,maxValue);
+            SetEngine(minValue,maxValue);
         }
-        
-        public string Mutate(string pChromosome)
-        {
-            /*
-             * Function that mutates a bit from de genotype 
-             */
-
-            Console.WriteLine(pChromosome);
-            
-            int mutationIndex = 
-                MathematicalOperations.RandomIntegerInRange(Constants.GenotypeMinvalue, 
-                    Constants.ChromosomeSize);
-        
-            StringBuilder mutator = new StringBuilder(pChromosome);
-            if (pChromosome[mutationIndex].Equals('1'))
-            {
-                mutator[mutationIndex] = '0';
-            }
-            else
-            {
-                mutator[mutationIndex] = '1';
-            }
-        
-            pChromosome = mutator.ToString();
-            
-            Console.WriteLine(pChromosome);
-            return pChromosome;
-        }
-        
-        
 
         public override string ToString()
         {
