@@ -16,7 +16,11 @@ namespace RobotGA_Project.GASolution
         public static readonly int GenotypeMinvalue = 0;
         public static readonly int GenotypeMaxValue = (int)Math.Pow(2,ChromosomeSize);
 
-        public static readonly int MutationProbability = 10;
+        public static readonly int CompleteChromosomeSize = ChromosomeSize * ChromosomeQuantity;
+        
+        public static readonly int PopulationSize = 50;
+        
+        public static readonly int MutationProbability = 4;
         
         public static readonly int BasicEnergyConsumption = 1;
         public static readonly int BasicCost = 1;

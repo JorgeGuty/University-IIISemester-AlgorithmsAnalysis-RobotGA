@@ -1,4 +1,6 @@
-﻿using System.Text;
+﻿using System.Collections.Generic;
+using System.Linq;
+using System.Text;
 
 namespace RobotGA_Project.GASolution
 {
@@ -6,12 +8,10 @@ namespace RobotGA_Project.GASolution
     {
         public static string MixGeneticMaterial(string pChromosomeA, string pChromosomeB, int pPartitionIndex)
         {
-
-            int completeChromosomeSize = Constants.ChromosomeSize * Constants.ChromosomeQuantity;
-
+            
             string chromosomeAPart = pChromosomeA.Substring(0, pPartitionIndex);
 
-            string chromosomeBPart = pChromosomeB.Substring(pPartitionIndex, completeChromosomeSize - pPartitionIndex);
+            string chromosomeBPart = pChromosomeB.Substring(pPartitionIndex, Constants.CompleteChromosomeSize - pPartitionIndex);
 
             string childChromosome = chromosomeAPart + chromosomeBPart;
             
@@ -43,12 +43,51 @@ namespace RobotGA_Project.GASolution
 
         public static int NormalizeFitnessScore(int pFitnessScore, int pMaxInThatCategory)
         {
-            int portionOfEachCriteria = 100 / Constants.FitnessCriteriaQuantity;
-            int normalizedScore = pFitnessScore * portionOfEachCriteria / pMaxInThatCategory;
+            var portionOfEachCriteria = 100 / Constants.FitnessCriteriaQuantity;
+            var normalizedScore = pFitnessScore * portionOfEachCriteria / pMaxInThatCategory;
             
             return normalizedScore;
+        }
+
+        public static void SetGenerationReproductionProbabilities(List<Robot> pGeneration)
+        {
+            var fitnessTotal = AddGenerationFitnessScores(pGeneration);
+            foreach (var robot in pGeneration)
+            {
+                robot.ReproductionProbability = (float) robot.Fitness / fitnessTotal;
+            }
+        }
+
+        private static int AddGenerationFitnessScores(List<Robot> pGeneration)
+        {
+            /*
+             *  Adds the fitness of all the individuals together
+             */
+
+            return pGeneration.Sum(robot => robot.Fitness);
             
         }
-        
     }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

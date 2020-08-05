@@ -11,6 +11,12 @@ namespace RobotGA_Project.GASolution
             return Random.Next(pLowerLimit, pUpperLimit);
         }
 
+        public static float Random0to1Float()
+        {
+            return (float)Random.NextDouble();
+        }
+        
+        
         public static string ConvertIntToBinaryString(int pIntegerValue)
         {
 

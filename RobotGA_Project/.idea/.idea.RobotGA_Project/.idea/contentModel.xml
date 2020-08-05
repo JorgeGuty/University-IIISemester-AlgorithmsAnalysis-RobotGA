@@ -42,8 +42,10 @@
         <e p="Engine.cs" t="Include" />
         <e p="Generation.cs" t="Include" />
         <e p="GeneticOperations.cs" t="Include" />
+        <e p="Hardware.cs" t="Include" />
         <e p="MathematicalOperations.cs" t="Include" />
         <e p="Robot.cs" t="Include" />
+        <e p="Software.cs" t="Include" />
         <e p="Terrain.cs" t="Include" />
       </e>
       <e p="Global.asax" t="Include" />

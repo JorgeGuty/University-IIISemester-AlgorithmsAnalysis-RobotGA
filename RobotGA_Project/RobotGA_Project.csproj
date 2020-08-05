@@ -126,8 +126,10 @@
     <Compile Include="GASolution\Generation.cs" />
     <Compile Include="GASolution\Constants.cs" />
     <Compile Include="GASolution\GeneticOperations.cs" />
+    <Compile Include="GASolution\Hardware.cs" />
     <Compile Include="GASolution\MathematicalOperations.cs" />
     <Compile Include="GASolution\Robot.cs" />
+    <Compile Include="GASolution\Software.cs" />
     <Compile Include="GASolution\Terrain.cs" />
     <Compile Include="GASolution\Engine.cs" />
     <Compile Include="Global.asax.cs">
