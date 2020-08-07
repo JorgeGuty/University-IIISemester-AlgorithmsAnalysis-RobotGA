@@ -19,9 +19,11 @@ namespace RobotGA_Project.GASolution
         public int Fitness { get; set; }
         public Hardware Hardware { get; set; }
         
+        public Software Software { get; set; }
+        
         public List<Terrain> Route { get; set; }
 
-        public Robot(Robot pParentA, Robot pParentB, int pPartitionIndex)
+        public Robot(Robot pParentA, Robot pParentB, int pHardwarePartitionIndex, int pSoftwarePartitionIndex)
         {
             
             /*
@@ -34,7 +36,10 @@ namespace RobotGA_Project.GASolution
 
             Hardware =
                 new Hardware(pParentA.Hardware.CompleteChromosome, pParentB.Hardware.CompleteChromosome,
-                    pPartitionIndex);
+                    pHardwarePartitionIndex);
+            Software = 
+                new Software(pParentA.Software.CompleteChromosome, pParentB.Software.CompleteChromosome,
+                    pSoftwarePartitionIndex);
 
             InitializeFields();
             
@@ -50,6 +55,7 @@ namespace RobotGA_Project.GASolution
             ParentB = null;  // La virgencita
             
             Hardware = new Hardware();
+            Software = new Software();
             
             InitializeFields();
             
@@ -97,11 +103,25 @@ namespace RobotGA_Project.GASolution
         public override string ToString()
         {
             string stringObject;
-
             stringObject = "Rango de Cámara: " + Hardware.Camera.Range + "    ";
             stringObject += "Carga de Batería: " + Hardware.Battery.Energy + "    ";
             stringObject += "Capacidad de Motor: " + Hardware.Engine.MaxTerrainDifficulty+ "    ";
-            
+            stringObject += "\n";
+            stringObject += "Valores de software:";
+            stringObject += "\n";
+            stringObject += "Puntaje Moverse hacia la meta:" + Software.MoveTowardsEnd;
+            stringObject += "\n";
+            stringObject += "Puntaje Moverse fuera de la meta:" + Software.MoveAwayFromEnd;
+            stringObject += "\n";
+            stringObject += "Puntaje Moverse a terreno pasable:" + Software.MoveToPassableTerrain;
+            stringObject += "\n";
+            stringObject += "Puntaje Moverse a terreno no pasable:" + Software.MoveToNonPassableTerrain;
+            stringObject += "\n";
+            stringObject += "Puntaje gastar menos energía:" + Software.SpendTheLessEnergy;
+            stringObject += "\n";
+            stringObject += "Puntaje gastar más energía:" + Software.SpendTheMostEnergy;
+            stringObject += "\n";
+            stringObject += "Puntaje ni más ni menos energía:" + Software.SpendNormalEnergy;
             return stringObject;
 
         }

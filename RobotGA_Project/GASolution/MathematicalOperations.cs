@@ -11,7 +11,7 @@ namespace RobotGA_Project.GASolution
             return Random.Next(pLowerLimit, pUpperLimit);
         }
 
-        public static float Random0to1Float()
+        public static float Random0To1Float()
         {
             return (float)Random.NextDouble();
         }

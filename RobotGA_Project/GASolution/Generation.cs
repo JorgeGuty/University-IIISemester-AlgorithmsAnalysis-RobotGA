@@ -70,29 +70,37 @@ namespace RobotGA_Project.GASolution
              */
             int individualIndex;
             int bitIndex;
+            string completeChromosome;
+            int softwareOrHardwareMutate;
 
             for (int times = 0; times < Constants.MutationProbability; times++)
             {
-                
                 individualIndex = 
                     MathematicalOperations.RandomIntegerInRange(0, Constants.PopulationSize);
-                bitIndex = 
-                    MathematicalOperations.RandomIntegerInRange(0, Constants.CompleteChromosomeSize);
-
-                string completeHardwareChromosome = Population[individualIndex].Hardware.CompleteChromosome;
-                
-                completeHardwareChromosome =
-                    GeneticOperations.Mutate(bitIndex, completeHardwareChromosome);
-                
-                Population[individualIndex].Hardware.Mutate(completeHardwareChromosome);
-                
+                softwareOrHardwareMutate = MathematicalOperations.RandomIntegerInRange(0, 2);
+                if (softwareOrHardwareMutate == 1)
+                {
+                    bitIndex = 
+                        MathematicalOperations.RandomIntegerInRange(0, Constants.CompleteChromosomeSize);
+                    completeChromosome = Population[individualIndex].Hardware.CompleteChromosome;
+                    completeChromosome =
+                        GeneticOperations.Mutate(bitIndex, completeChromosome);
+                    Population[individualIndex].Hardware.Mutate(completeChromosome);
+                }
+                else
+                {
+                    bitIndex = 
+                        MathematicalOperations.RandomIntegerInRange(0, Constants.SoftwareChromosomeSize);
+                    completeChromosome = Population[individualIndex].Software.CompleteChromosome;
+                    GeneticOperations.Mutate(bitIndex, completeChromosome);
+                    Population[individualIndex].Software.Mutate(completeChromosome);
+                }
             }
-            
         }
         
         private Robot SelectMatingPartner(List<Robot> pGeneration)
         {
-            var random0To1Number = MathematicalOperations.Random0to1Float();
+            var random0To1Number = MathematicalOperations.Random0To1Float();
             float accumulatedProbability = 0;
             var selectedIndex = -1;
             
@@ -108,11 +116,13 @@ namespace RobotGA_Project.GASolution
 
         private (Robot, Robot) ReproduceIndividuals(Robot pParentA, Robot pParentB)
         {
-            int partitionIndex =
-                MathematicalOperations.RandomIntegerInRange(0, Constants.CompleteChromosomeSize);
+            int hardwarePartitionIndex =
+                MathematicalOperations.RandomIntegerInRange(1, Constants.CompleteChromosomeSize);
+            int softwarePartitionIndex = 
+                MathematicalOperations.RandomIntegerInRange(1, Constants.SoftwareChromosomeSize);
             
-            Robot child1 = new Robot(pParentA, pParentB, partitionIndex);
-            Robot child2 = new Robot(pParentB, pParentA, partitionIndex);
+            Robot child1 = new Robot(pParentA, pParentB, hardwarePartitionIndex, softwarePartitionIndex);
+            Robot child2 = new Robot(pParentB, pParentA, hardwarePartitionIndex, softwarePartitionIndex);
 
             return (child1, child2);
         }

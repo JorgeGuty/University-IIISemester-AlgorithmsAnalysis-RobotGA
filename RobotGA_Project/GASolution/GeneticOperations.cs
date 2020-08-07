@@ -8,10 +8,11 @@ namespace RobotGA_Project.GASolution
     {
         public static string MixGeneticMaterial(string pChromosomeA, string pChromosomeB, int pPartitionIndex)
         {
+            int chromosomeSize = pChromosomeA.Length;
             
             string chromosomeAPart = pChromosomeA.Substring(0, pPartitionIndex);
 
-            string chromosomeBPart = pChromosomeB.Substring(pPartitionIndex, Constants.CompleteChromosomeSize - pPartitionIndex);
+            string chromosomeBPart = pChromosomeB.Substring(pPartitionIndex, chromosomeSize - pPartitionIndex);
 
             string childChromosome = chromosomeAPart + chromosomeBPart;
             

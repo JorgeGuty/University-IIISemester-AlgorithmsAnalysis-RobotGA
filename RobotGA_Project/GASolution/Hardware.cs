@@ -135,14 +135,15 @@
         {
             int minValue = Constants.GenotypeMinvalue;
             int maxValue = Constants.GenotypeMaxValue;
+            
+            CompleteChromosome = pMutatedChromosome;
+            
             SetGenotypes();
+            
             SetBattery(minValue,maxValue);
             SetCamera(minValue,maxValue);
             SetEngine(minValue,maxValue);
         }
 
-        
-        
-        
     }
 }

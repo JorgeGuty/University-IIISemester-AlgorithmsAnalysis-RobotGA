@@ -18,7 +18,7 @@ namespace RobotGA_Project.GASolution
 
         public static readonly int CompleteChromosomeSize = ChromosomeSize * ChromosomeQuantity;
         
-        public static readonly int PopulationSize = 50;
+        public static readonly int PopulationSize = 2;
         
         public static readonly int MutationProbability = 4;
         
@@ -45,6 +45,11 @@ namespace RobotGA_Project.GASolution
         
         public static readonly Terrain DifficultTerrain = 
             new Terrain(3,BasicEnergyConsumption + (2 * TerrainEnergyConsumptionIncrement));
+        
+        // Software Constants
+
+        public static int BehaviorTraitQuantity = 7;
+        public static int SoftwareChromosomeSize = ChromosomeSize * BehaviorTraitQuantity;
         
         // Engine Constants
 

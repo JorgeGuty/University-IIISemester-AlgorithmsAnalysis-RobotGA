@@ -32,20 +32,18 @@ namespace RobotGA_Project.Controllers
             foreach (var robot in gen0.Population)
             {
                 Console.WriteLine(robot);
+                Console.WriteLine(1);
             }
+            
             Console.WriteLine("*********************************");
+            
             Generation gen1 = new Generation(gen0.Population);
 
             foreach (var robot in gen1.Population)
             {
                 Console.WriteLine(robot);
-            }
-            Console.WriteLine("*********************************");
-            Generation gen2 = new Generation(gen1.Population);
+                Console.WriteLine(2);
 
-            foreach (var robot in gen2.Population)
-            {
-                Console.WriteLine(robot);
             }
             
             return View();
