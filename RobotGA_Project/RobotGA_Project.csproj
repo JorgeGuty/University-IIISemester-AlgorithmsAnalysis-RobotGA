@@ -123,6 +123,8 @@
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="GASolution\Battery.cs" />
     <Compile Include="GASolution\Camera.cs" />
+    <Compile Include="GASolution\Data Structures\Graph\Arc.cs" />
+    <Compile Include="GASolution\Data Structures\Graph\Node.cs" />
     <Compile Include="GASolution\Generation.cs" />
     <Compile Include="GASolution\Constants.cs" />
     <Compile Include="GASolution\GeneticOperations.cs" />
