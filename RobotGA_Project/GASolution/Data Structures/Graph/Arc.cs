@@ -12,6 +12,5 @@
             PointA = pPointA;
             PointB = pPointB;
         }
-        
     }
 }

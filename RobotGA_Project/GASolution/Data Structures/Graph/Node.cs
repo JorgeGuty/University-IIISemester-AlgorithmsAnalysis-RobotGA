@@ -5,9 +5,9 @@ namespace RobotGA_Project.GASolution.Data_Structures.Graph
 {
     public class Node <T>
     {
-        private List<Node<T>> Connections { get; set; }
-        private T Object { get; set; }
-        private string Id { get; set; }
+        public List<Node<T>> Connections { get; set; }
+        public T Object { get; set; }
+        public string Id { get; set; }
 
         public Node(T pObject)
         {
@@ -28,6 +28,5 @@ namespace RobotGA_Project.GASolution.Data_Structures.Graph
                 return false;
             }
         }
-
     }
 }
