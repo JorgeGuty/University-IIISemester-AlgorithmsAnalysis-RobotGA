@@ -28,7 +28,7 @@ namespace RobotGA_Project.GASolution
         // Map Constants
         
         public static readonly int MapDimensions = 20; // Height and width of the squared map
-        public static readonly (int, int) StartIndex = (MapDimensions - 1, 0); // Starting position (X,Y)
+        public static readonly (int, int) StartIndex = (1, 1); // Starting position (X,Y)
         public static readonly (int, int) GoalIndex = (0, MapDimensions - 1); // Goal position (X,Y)
         
         // Terrain Constants

@@ -11,21 +11,25 @@ namespace RobotGA_Project.Controllers
     {
         public ActionResult Index()
         {
-            /*
+           
             Robot testbot = new Robot();
-            Robot robota = new Robot();
-            Console.WriteLine(testbot.ToString());
-            Console.WriteLine(robota.ToString());
+            Console.WriteLine(testbot);
+            Console.WriteLine(testbot.VisionRange.Nodes.Count);
+            
+            /*
+           Robot robota = new Robot();
+           Console.WriteLine(testbot.ToString());
+           Console.WriteLine(robota.ToString());
 
-            Robot robito = new Robot(testbot, robota, 10);
-            Console.WriteLine(robito.ToString());
-            
-            robito = new Robot(robota, testbot, 10);
-            Console.WriteLine(robito.ToString());
-            robito.CalculateFitness();
-            
-            Console.WriteLine(robito.Fitness);
-            //*/
+           Robot robito = new Robot(testbot, robota, 10);
+           Console.WriteLine(robito.ToString());
+           
+           robito = new Robot(robota, testbot, 10);
+           Console.WriteLine(robito.ToString());
+           robito.CalculateFitness();
+           
+           Console.WriteLine(robito.Fitness);
+           
             
             Generation gen0 = new Generation();
             
@@ -45,7 +49,7 @@ namespace RobotGA_Project.Controllers
                 Console.WriteLine(2);
 
             }
-            
+            //*/
             return View();
         }
 

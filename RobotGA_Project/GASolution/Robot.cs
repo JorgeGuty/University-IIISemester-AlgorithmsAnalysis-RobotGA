@@ -114,7 +114,7 @@ namespace RobotGA_Project.GASolution
         }
         
         private void SetVisionRange()
-        {
+        { 
             VisionRange = new NonDirectedGraph<(int, int)>();
            
            var positionNode =  new Node<(int,int)>(Position);
@@ -131,11 +131,10 @@ namespace RobotGA_Project.GASolution
            Node<(int, int)> leftNode;
            
            var robotRange = Hardware.Camera.Range;
-           for (var range = 1; range > robotRange; range++)
+           for (var range = 1; range <= robotRange; range++)
            {
                aboveIndex = (Position.Item1, Position.Item2 - range);
-               
-               if (aboveIndex.Item1 <= Constants.MapDimensions || aboveIndex.Item2 <= Constants.MapDimensions)
+               if (aboveIndex.Item2 >= 0)
                {
                    aboveNode =  new Node<(int,int)>(aboveIndex);
                    VisionRange.AddNode(aboveNode);
@@ -143,8 +142,7 @@ namespace RobotGA_Project.GASolution
                }
                
                belowIndex = (Position.Item1, Position.Item2 + range);
-
-               if (belowIndex.Item1 <= Constants.MapDimensions || belowIndex.Item2 <= Constants.MapDimensions)
+               if (belowIndex.Item2 < Constants.MapDimensions)
                {
                    belowNode =  new Node<(int,int)>(belowIndex);
                    VisionRange.AddNode(belowNode);
@@ -152,7 +150,7 @@ namespace RobotGA_Project.GASolution
                }
                
                rightIndex = (Position.Item1 + range, Position.Item2);
-               if (rightIndex.Item1 <= Constants.MapDimensions)
+               if (rightIndex.Item1 < Constants.MapDimensions)
                {
                    rightNode =  new Node<(int,int)>(rightIndex);
                    VisionRange.AddNode(rightNode);
@@ -160,7 +158,7 @@ namespace RobotGA_Project.GASolution
                }
                
                leftIndex = (Position.Item1 - range, Position.Item2);
-               if (leftIndex.Item1 <= Constants.MapDimensions)
+               if (leftIndex.Item1 >= 0)
                {
                    leftNode =  new Node<(int,int)>(leftIndex);
                    VisionRange.AddNode(leftNode);
