@@ -126,6 +126,8 @@
     <Compile Include="GASolution\Data Structures\Graph\Arc.cs" />
     <Compile Include="GASolution\Data Structures\Graph\NonDirectedGraph.cs" />
     <Compile Include="GASolution\Data Structures\Graph\Node.cs" />
+    <Compile Include="GASolution\Data Structures\MapStructures\Map.cs" />
+    <Compile Include="GASolution\Data Structures\MapStructures\MapLoader.cs" />
     <Compile Include="GASolution\Generation.cs" />
     <Compile Include="GASolution\Constants.cs" />
     <Compile Include="GASolution\GeneticOperations.cs" />
@@ -147,6 +149,7 @@
     <Content Include="Content\bootstrap.min.css" />
     <Content Include="favicon.ico" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
+    <Content Include="GASolution\Data Structures\MapStructures\MapFiles\map1.txt" />
     <Content Include="Global.asax" />
     <Content Include="Content\Site.css" />
     <Content Include="Scripts\bootstrap.js" />

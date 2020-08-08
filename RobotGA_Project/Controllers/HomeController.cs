@@ -1,9 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
 using System.Web.Mvc;
 using RobotGA_Project.GASolution;
+using RobotGA_Project.GASolution.Data_Structures.MapStructures;
 
 namespace RobotGA_Project.Controllers
 {
@@ -27,24 +25,26 @@ namespace RobotGA_Project.Controllers
             Console.WriteLine(robito.Fitness);
             //*/
             
-            Generation gen0 = new Generation();
-            
-            foreach (var robot in gen0.Population)
-            {
-                Console.WriteLine(robot);
-                Console.WriteLine(1);
-            }
-            
-            Console.WriteLine("*********************************");
-            
-            Generation gen1 = new Generation(gen0.Population);
+            // Generation gen0 = new Generation();
+            //
+            // foreach (var robot in gen0.Population)
+            // {
+            //     Console.WriteLine(robot);
+            //     Console.WriteLine(1);
+            // }
+            //
+            // Console.WriteLine("*********************************");
+            //
+            // Generation gen1 = new Generation(gen0.Population);
+            //
+            // foreach (var robot in gen1.Population) {
+            //     Console.WriteLine(robot);
+            //     Console.WriteLine(2);
+            // }
 
-            foreach (var robot in gen1.Population)
-            {
-                Console.WriteLine(robot);
-                Console.WriteLine(2);
+            var map = MapLoader.LoadMap(@"C:\GitHub_Projects\University_RobotGA\RobotGA_Project\GASolution\Data Structures\MapStructures\MapFiles\map1.txt");
 
-            }
+            Console.Out.WriteLine(map.TerrainMap[0,19].Id);
             
             return View();
         }

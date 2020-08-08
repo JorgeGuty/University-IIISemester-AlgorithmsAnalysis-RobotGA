@@ -5,10 +5,13 @@
         public int DifficultyLevel { get; set; }
         public int EnergyConsumption { get; set; }
 
-        public Terrain(int pDifficultyLevel, int pEnergyConsumption)
+        public string Id { get; }
+
+        public Terrain(int pDifficultyLevel, int pEnergyConsumption, string id)
         {
             DifficultyLevel = pDifficultyLevel;
             EnergyConsumption = pEnergyConsumption;
+            Id = id;
         }
         
         

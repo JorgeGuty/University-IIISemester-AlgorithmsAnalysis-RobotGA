@@ -35,16 +35,16 @@ namespace RobotGA_Project.GASolution
         // Terrain types
         
         public static readonly Terrain BlockedTerrain = 
-            new Terrain(Int32.MaxValue, Int32.MaxValue);
+            new Terrain(Int32.MaxValue, Int32.MaxValue, "M");
         
         public static readonly Terrain EasyTerrain = 
-            new Terrain(1,BasicEnergyConsumption);
+            new Terrain(1,BasicEnergyConsumption, "A");
         
         public static readonly Terrain MediumTerrain = 
-            new Terrain(2, BasicEnergyConsumption + TerrainEnergyConsumptionIncrement);
+            new Terrain(2, BasicEnergyConsumption + TerrainEnergyConsumptionIncrement, "B");
         
         public static readonly Terrain DifficultTerrain = 
-            new Terrain(3,BasicEnergyConsumption + (2 * TerrainEnergyConsumptionIncrement));
+            new Terrain(3,BasicEnergyConsumption + (2 * TerrainEnergyConsumptionIncrement), "C");
         
         // Software Constants
 
