@@ -46,7 +46,6 @@ namespace RobotGA_Project.GASolution
         {
             var portionOfEachCriteria = 100 / Constants.FitnessCriteriaQuantity;
             var normalizedScore = pFitnessScore * portionOfEachCriteria / pMaxInThatCategory;
-            
             return normalizedScore;
         }
 

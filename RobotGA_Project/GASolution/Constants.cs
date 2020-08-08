@@ -24,8 +24,12 @@ namespace RobotGA_Project.GASolution
         
         public static readonly int BasicEnergyConsumption = 1;
         public static readonly int BasicCost = 1;
-
+        
+        // Map Constants
+        
         public static readonly int MapDimensions = 20; // Height and width of the squared map
+        public static readonly (int, int) StartIndex = (1, 1); // Starting position (X,Y)
+        public static readonly (int, int) GoalIndex = (0, MapDimensions - 1); // Goal position (X,Y)
         
         // Terrain Constants
 

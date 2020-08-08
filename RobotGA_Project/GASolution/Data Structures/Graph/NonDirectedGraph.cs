@@ -5,8 +5,8 @@ namespace RobotGA_Project.GASolution.Data_Structures.Graph
 {
     public class NonDirectedGraph <T>
     {
-        private List<Node<T>> Nodes { get; set; }
-        private List<Arc<T>> Arcs { get; set; }
+        public List<Node<T>> Nodes { get; set; }
+        public List<Arc<T>> Arcs { get; set; }
 
         public NonDirectedGraph()
         {
