@@ -59,6 +59,9 @@
       <e p="Global.asax.cs" t="Include" />
       <e p="Models" t="Include">
         <e p="HardwareModel.cs" t="Include" />
+        <e p="ModelControllers" t="Include">
+          <e p="GenerationModelController.cs" t="Include" />
+        </e>
         <e p="RobotModel.cs" t="Include" />
         <e p="SoftwareModel.cs" t="Include" />
       </e>

@@ -22,7 +22,7 @@ namespace RobotGA_Project.GASolution
         
         public Software Software { get; set; }
         
-        public List<Terrain> Route { get; set; }
+        public List<(int, int)> Route { get; set; }
 
         public NonDirectedGraph<(int, int)> VisionRange; // Vision Range of the robot, depends on the camera type. Represented by a graph.
         
@@ -70,7 +70,7 @@ namespace RobotGA_Project.GASolution
         {
             Fitness = 0;
             ReproductionProbability = 0f;
-            Route = new List<Terrain>();
+            Route = new List<(int, int)>();
             Position = Constants.StartIndex;
             TotalCost = Hardware.Cost;
             SetVisionRange();

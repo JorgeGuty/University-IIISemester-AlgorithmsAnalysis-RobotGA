@@ -139,6 +139,7 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Models\HardwareModel.cs" />
+    <Compile Include="Models\ModelControllers\GenerationModelController.cs" />
     <Compile Include="Models\RobotModel.cs" />
     <Compile Include="Models\SoftwareModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

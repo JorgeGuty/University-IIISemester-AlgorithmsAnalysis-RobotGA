@@ -8,6 +8,8 @@ namespace RobotGA_Project.Models
     public class RobotModel
     {
         [Required] public int Id { get; set; }
+        
+        [Required] public int GenerationId { get; set; }
         [Required][Display(Name = "Fitness")] public int Fitness { get; set; }
         [Required][Display(Name = "Costo")] public float Cost { get; set; }
         [Required][Display(Name = "Probabilidad de Reproducción")] public float ReproductionProbability { get; set; }
