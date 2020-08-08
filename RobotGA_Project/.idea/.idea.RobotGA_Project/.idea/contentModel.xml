@@ -25,7 +25,10 @@
         <e p="Site.css" t="Include" />
       </e>
       <e p="Controllers" t="Include">
+        <e p="GenerationController.cs" t="Include" />
+        <e p="GenerationsController.cs" t="Include" />
         <e p="HomeController.cs" t="Include" />
+        <e p="RobotController.cs" t="Include" />
       </e>
       <e p="favicon.ico" t="Include" />
       <e p="fonts" t="Include">
@@ -58,6 +61,7 @@
       <e p="Global.asax" t="Include" />
       <e p="Global.asax.cs" t="Include" />
       <e p="Models" t="Include">
+        <e p="GenerationModel.cs" t="Include" />
         <e p="HardwareModel.cs" t="Include" />
         <e p="ModelControllers" t="Include">
           <e p="GenerationModelController.cs" t="Include" />

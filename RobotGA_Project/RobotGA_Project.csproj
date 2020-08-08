@@ -120,7 +120,10 @@
     <Compile Include="App_Start\BundleConfig.cs" />
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
+    <Compile Include="Controllers\GenerationController.cs" />
+    <Compile Include="Controllers\GenerationsController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\RobotController.cs" />
     <Compile Include="GASolution\Battery.cs" />
     <Compile Include="GASolution\Camera.cs" />
     <Compile Include="GASolution\Data Structures\Graph\Arc.cs" />
@@ -138,6 +141,7 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Models\GenerationModel.cs" />
     <Compile Include="Models\HardwareModel.cs" />
     <Compile Include="Models\ModelControllers\GenerationModelController.cs" />
     <Compile Include="Models\RobotModel.cs" />
