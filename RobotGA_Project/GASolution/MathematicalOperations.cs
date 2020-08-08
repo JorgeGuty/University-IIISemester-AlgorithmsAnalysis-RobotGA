@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace RobotGA_Project.GASolution
 {
@@ -32,6 +34,30 @@ namespace RobotGA_Project.GASolution
         public static int ConvertBinaryStringToInt(string pBinaryValue)
         {
             return Convert.ToInt32(pBinaryValue, 2);
+        }
+
+        public static float StandardDeviation(List<int> pPopulation)
+        {
+            var quantity = pPopulation.Count;
+            return (float)Math.Sqrt(Variance(pPopulation, quantity));
+        }
+
+        public static float Variance(List<int> pPopulation, int pQuantity)
+        {
+            var average = Average(pPopulation, pQuantity);
+            var summation = 0f;
+            foreach (var value in pPopulation)
+            {
+                var difference = value - average;
+                summation += (float)Math.Pow(difference, 2);
+            }
+            return summation / pQuantity;
+        }
+
+        public static float Average(List<int> pPopulation, int pQuantity)
+        {
+            var summation = pPopulation.Sum();
+            return (float) summation / pQuantity;
         }
 
 

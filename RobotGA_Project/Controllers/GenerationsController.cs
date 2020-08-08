@@ -1,4 +1,6 @@
-﻿using System.Web.Mvc;
+﻿using System.Collections.Generic;
+using System.Web.Mvc;
+using RobotGA_Project.GASolution;
 
 namespace RobotGA_Project.Controllers
 {
@@ -7,6 +9,7 @@ namespace RobotGA_Project.Controllers
         // GET
         public ActionResult Index()
         {
+            var gen0 = new Generation();
             return View();
         }
     }

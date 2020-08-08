@@ -9,6 +9,7 @@ namespace RobotGA_Project.GASolution
          * Class that stores and manages the reproduction, mutation and fitness of a population.
          */
         public List<Robot> Population { get; set; }
+        public float FitnessStandardDeviation { get; set; }
 
         public Generation(List<Robot> pLastGeneration)
         {
@@ -56,10 +57,14 @@ namespace RobotGA_Project.GASolution
 
         private void FitGeneration()
         {
+            var fitnessList = new List<int>();
             foreach (var robot in Population)
             {
                 robot.CalculateFitness();
+                fitnessList.Add(robot.Fitness);
             }
+
+            FitnessStandardDeviation = MathematicalOperations.StandardDeviation(fitnessList);
         }
 
         private void GenerationalMutation()
