@@ -134,24 +134,38 @@ namespace RobotGA_Project.GASolution
            for (var range = 1; range > robotRange; range++)
            {
                aboveIndex = (Position.Item1, Position.Item2 - range);
-               aboveNode =  new Node<(int,int)>(aboveIndex);
-               VisionRange.AddNode(aboveNode);
-               VisionRange.AddArc(0, positionNode, aboveNode);
-           
+               
+               if (aboveIndex.Item1 <= Constants.MapDimensions || aboveIndex.Item2 <= Constants.MapDimensions)
+               {
+                   aboveNode =  new Node<(int,int)>(aboveIndex);
+                   VisionRange.AddNode(aboveNode);
+                   VisionRange.AddArc(0, positionNode, aboveNode);
+               }
+               
                belowIndex = (Position.Item1, Position.Item2 + range);
-               belowNode =  new Node<(int,int)>(belowIndex);
-               VisionRange.AddNode(belowNode);
-               VisionRange.AddArc(0, positionNode, belowNode);
-           
+
+               if (belowIndex.Item1 <= Constants.MapDimensions || belowIndex.Item2 <= Constants.MapDimensions)
+               {
+                   belowNode =  new Node<(int,int)>(belowIndex);
+                   VisionRange.AddNode(belowNode);
+                   VisionRange.AddArc(0, positionNode, belowNode);
+               }
+               
                rightIndex = (Position.Item1 + range, Position.Item2);
-               rightNode =  new Node<(int,int)>(rightIndex);
-               VisionRange.AddNode(rightNode);
-               VisionRange.AddArc(0, positionNode, rightNode);
-           
+               if (rightIndex.Item1 <= Constants.MapDimensions)
+               {
+                   rightNode =  new Node<(int,int)>(rightIndex);
+                   VisionRange.AddNode(rightNode);
+                   VisionRange.AddArc(0, positionNode, rightNode);
+               }
+               
                leftIndex = (Position.Item1 - range, Position.Item2);
-               leftNode =  new Node<(int,int)>(leftIndex);
-               VisionRange.AddNode(leftNode);
-               VisionRange.AddArc(0, positionNode, leftNode);
+               if (leftIndex.Item1 <= Constants.MapDimensions)
+               {
+                   leftNode =  new Node<(int,int)>(leftIndex);
+                   VisionRange.AddNode(leftNode);
+                   VisionRange.AddArc(0, positionNode, leftNode);
+               }
            }
         }
         public override string ToString()
