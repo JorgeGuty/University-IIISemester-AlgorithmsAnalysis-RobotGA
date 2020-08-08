@@ -10,7 +10,7 @@ namespace RobotGA_Project.Controllers
         public ActionResult Index()
         {
             /*
-            Robot testbot = new Robot();
+            
             Robot robota = new Robot();
             Console.WriteLine(testbot.ToString());
             Console.WriteLine(robota.ToString());
@@ -43,9 +43,9 @@ namespace RobotGA_Project.Controllers
             // }
 
             var map = MapLoader.LoadMap(@"C:\GitHub_Projects\University_RobotGA\RobotGA_Project\GASolution\Data Structures\MapStructures\MapFiles\map1.txt");
+            var testBot = new Robot();
 
-            Console.Out.WriteLine(map.TerrainMap[0,19].Id);
-            
+
             return View();
         }
 

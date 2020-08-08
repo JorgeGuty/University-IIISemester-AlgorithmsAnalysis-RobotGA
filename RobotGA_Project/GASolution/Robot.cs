@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Security.Permissions;
-using System.Text;
+﻿using System.Collections.Generic;
 using RobotGA_Project.GASolution.Data_Structures.Graph;
 
 namespace RobotGA_Project.GASolution
@@ -22,15 +19,13 @@ namespace RobotGA_Project.GASolution
         
         public Software Software { get; set; }
         
-        public List<(int, int)> Route { get; set; }
+        public List<Terrain> Route { get; set; }
 
         public NonDirectedGraph<(int, int)> VisionRange; // Vision Range of the robot, depends on the camera type. Represented by a graph.
         
         public (int,int) Position { get; set; } // (Rows,Columns)
 
-        public Robot(Robot pParentA, Robot pParentB, int pHardwarePartitionIndex, int pSoftwarePartitionIndex)
-        {
-            
+        public Robot(Robot pParentA, Robot pParentB, int pHardwarePartitionIndex, int pSoftwarePartitionIndex) {
             /*
              * Method that initializes a Robot with two predecessors.
              * Uses genetic material mixing.
@@ -190,6 +185,10 @@ namespace RobotGA_Project.GASolution
             stringObject += "Puntaje ni más ni menos energía:" + Software.SpendNormalEnergy;
             return stringObject;
 
+        }
+
+        public void CalculateArchesWeights() {
+            
         }
     }
 }
