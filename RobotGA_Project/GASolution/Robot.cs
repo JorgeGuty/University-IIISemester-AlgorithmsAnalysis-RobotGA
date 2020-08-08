@@ -70,7 +70,7 @@ namespace RobotGA_Project.GASolution
         {
             Fitness = 0;
             ReproductionProbability = 0f;
-            Route = new List<Terrain>();
+            Route = new List<(int, int)>();
             Position = Constants.StartIndex;
             TotalCost = Hardware.Cost;
             SetVisionRange();
