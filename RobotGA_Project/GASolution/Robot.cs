@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Security.Permissions;
 using System.Text;
+using RobotGA_Project.GASolution.Data_Structures.Graph;
 
 namespace RobotGA_Project.GASolution
 {
@@ -22,6 +23,10 @@ namespace RobotGA_Project.GASolution
         public Software Software { get; set; }
         
         public List<Terrain> Route { get; set; }
+
+        public NonDirectedGraph<(int, int)> VisionRange; // Vision Range of the robot, depends on the camera type. Represented by a graph.
+        
+        public (int,int) Position { get; set; } // (Rows,Columns)
 
         public Robot(Robot pParentA, Robot pParentB, int pHardwarePartitionIndex, int pSoftwarePartitionIndex)
         {
@@ -66,7 +71,15 @@ namespace RobotGA_Project.GASolution
             Fitness = 0;
             ReproductionProbability = 0f;
             Route = new List<Terrain>();
+            Position = Constants.StartIndex;
             TotalCost = Hardware.Cost;
+            SetVisionRange();
+        }
+        
+        private void Move((int, int) pNewPosition)
+        {
+            Position = pNewPosition;
+            SetVisionRange();
         }
         
         public void CalculateFitness()
@@ -99,7 +112,48 @@ namespace RobotGA_Project.GASolution
             Fitness = distanceScore + stepsScore + energyScore + costScore;
             
         }
+        
+        private void SetVisionRange()
+        {
+            VisionRange = new NonDirectedGraph<(int, int)>();
+           
+           var positionNode =  new Node<(int,int)>(Position);
+           VisionRange.AddNode(positionNode);
 
+           (int, int) aboveIndex;
+           (int, int) belowIndex;
+           (int, int) rightIndex;
+           (int, int) leftIndex;
+           
+           Node<(int, int)> aboveNode;
+           Node<(int, int)> belowNode;
+           Node<(int, int)> rightNode;
+           Node<(int, int)> leftNode;
+           
+           var robotRange = Hardware.Camera.Range;
+           for (var range = 1; range > robotRange; range++)
+           {
+               aboveIndex = (Position.Item1, Position.Item2 - range);
+               aboveNode =  new Node<(int,int)>(aboveIndex);
+               VisionRange.AddNode(aboveNode);
+               VisionRange.AddArc(0, positionNode, aboveNode);
+           
+               belowIndex = (Position.Item1, Position.Item2 + range);
+               belowNode =  new Node<(int,int)>(belowIndex);
+               VisionRange.AddNode(belowNode);
+               VisionRange.AddArc(0, positionNode, belowNode);
+           
+               rightIndex = (Position.Item1 + range, Position.Item2);
+               rightNode =  new Node<(int,int)>(rightIndex);
+               VisionRange.AddNode(rightNode);
+               VisionRange.AddArc(0, positionNode, rightNode);
+           
+               leftIndex = (Position.Item1 - range, Position.Item2);
+               leftNode =  new Node<(int,int)>(leftIndex);
+               VisionRange.AddNode(leftNode);
+               VisionRange.AddArc(0, positionNode, leftNode);
+           }
+        }
         public override string ToString()
         {
             string stringObject;
