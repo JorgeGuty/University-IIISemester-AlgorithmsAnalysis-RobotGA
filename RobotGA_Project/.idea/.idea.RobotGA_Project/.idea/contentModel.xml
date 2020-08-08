@@ -1,7 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ContentModelStore">
-    <e p="C:\GitHub_Projects\University_RobotGA\RobotGA_Project" t="IncludeRecursive">
+    <e p="C:\Users\jguty\.Rider2019.3\config\consoles\db" t="IncludeRecursive" />
+    <e p="C:\Users\jguty\.Rider2019.3\config\extensions" t="IncludeRecursive" />
+    <e p="C:\Users\jguty\.Rider2019.3\system\extResources" t="IncludeRecursive" />
+    <e p="C:\Users\jguty\.Rider2019.3\system\resharper-host\local\Transient\ReSharperHost\v193\SolutionCaches\_RobotGA_Project.1211682244.00" t="ExcludeRecursive" />
+    <e p="C:\Users\jguty\OneDrive\GitHub\University_RobotGA\RobotGA_Project" t="IncludeRecursive">
       <e p="App_Data" t="Include" />
       <e p="App_Start" t="Include">
         <e p="BundleConfig.cs" t="Include" />
@@ -103,7 +107,5 @@
       <e p="Web.Debug.config" t="Include" />
       <e p="Web.Release.config" t="Include" />
     </e>
-    <e p="C:\Users\sebas\AppData\local\JetBrains\Rider2020.1\extResources" t="IncludeRecursive" />
-    <e p="C:\Users\sebas\AppData\local\JetBrains\Rider2020.1\resharper-host\local\Transient\ReSharperHost\v201\SolutionCaches\_RobotGA_Project.-1725141450.00" t="ExcludeRecursive" />
   </component>
 </project>
