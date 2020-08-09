@@ -1,4 +1,5 @@
-﻿using System.Web.Mvc;
+﻿using System;
+using System.Web.Mvc;
 using RobotGA_Project.Models;
 using RobotGA_Project.Models.ModelControllers;
 
@@ -13,7 +14,12 @@ namespace RobotGA_Project.Controllers
             {
                 if (generationModel.Id == pGenerationId)
                 {
+                    
                     GenerationModel selectedGeneration = generationModel;
+                    foreach (RobotModel robot in selectedGeneration.Population)
+                    {
+                        Console.WriteLine(robot.Cost);
+                    }
                     return View(selectedGeneration);
                 }
             }

@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using RobotGA_Project.GASolution;
 
 namespace RobotGA_Project.Models.ModelControllers
@@ -31,11 +32,13 @@ namespace RobotGA_Project.Models.ModelControllers
         
         private static List<RobotModel> GenerateGenerationOfModels(Generation pGeneration, int pGenerationId)
         {
+            Console.WriteLine("Robots--------------------------------------------------");
             List<RobotModel> generationOfModels = new List<RobotModel>();
-            for (int index = 0; index < generationOfModels.Count; index++)
+            for (int index = 0; index < pGeneration.Population.Count; index++)
             {
                 RobotModel newModel = GenerateRobotModel(pGeneration.Population[index], index, pGenerationId);
                 generationOfModels.Add(newModel);
+                Console.WriteLine(newModel.Cost);
             }
             return generationOfModels;
         }

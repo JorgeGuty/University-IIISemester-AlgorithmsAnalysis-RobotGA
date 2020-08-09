@@ -13,37 +13,37 @@
 
 <div class="row">
     <table class="table table-striped">
-            <thead>
+        <thead>
+            <tr>
+                <th>
+                    @Html.DisplayNameFor(model => model.Id)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.FitnessStandardDeviation)
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach(var generation in @Model)
+            {
                 <tr>
                     <th>
-                        @Html.DisplayNameFor(model => model.Id)
+                        Gen-@Html.DisplayFor(model => generation.Id)
                     </th>
                     <th>
-                        @Html.DisplayNameFor(model => model.FitnessStandardDeviation)
+                        @Html.DisplayFor(model => generation.FitnessStandardDeviation)
+                    </th>
+                    <th>
+                        @Html.ActionLink(
+                            "Details",
+                            "Index",
+                            "Generation",
+                            new {pGenerationId = generation.Id},
+                            new {@class = "btn btn-primary btn-lg"})
                     </th>
                 </tr>
-                </thead>
-                <tbody>
-                @foreach(var generation in @Model)
-                {
-                    <tr>
-                        <th>
-                            Gen-@Html.DisplayFor(model => generation.Id)
-                        </th>
-                        <th>
-                            @Html.DisplayFor(model => generation.FitnessStandardDeviation)
-                        </th>
-                        <th>
-                            @Html.ActionLink(
-                                "Details",
-                                "Index",
-                                "Generation",
-                                new {pGenerationId = generation.Id},
-                                new {@class = "btn btn-primary btn-lg"})
-                        </th>
-                    </tr>
-                }
-                </tbody>
-            </table>
-        <hr />
+            }
+        </tbody>
+    </table>
+    <hr />
 </div>

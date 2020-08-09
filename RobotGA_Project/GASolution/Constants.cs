@@ -18,7 +18,7 @@ namespace RobotGA_Project.GASolution
 
         public static readonly int CompleteChromosomeSize = ChromosomeSize * ChromosomeQuantity;
         
-        public static readonly int PopulationSize = 2;
+        public static readonly int PopulationSize = 20;
         
         public static readonly int MutationProbability = 4;
         

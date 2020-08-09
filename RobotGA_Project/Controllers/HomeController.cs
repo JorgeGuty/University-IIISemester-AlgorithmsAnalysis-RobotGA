@@ -4,6 +4,7 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using RobotGA_Project.GASolution;
+using RobotGA_Project.Models.ModelControllers;
 
 namespace RobotGA_Project.Controllers
 {
@@ -54,6 +55,13 @@ namespace RobotGA_Project.Controllers
 
         public ActionResult RunGA()
         {
+            var gen0 = new Generation();
+            var gen1 = new Generation(gen0.Population);
+            var gen2 = new Generation(gen1.Population);
+
+            var generations = new List<Generation> {gen0, gen1, gen2};
+
+            GenerationModelController.SetListOfGenerationModels(generations);
             return RedirectToAction("Index", "Generations");
         }
 

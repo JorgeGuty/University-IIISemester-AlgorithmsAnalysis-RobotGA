@@ -39,7 +39,7 @@ namespace RobotGA_Project.GASolution
         {
             List<Robot> newGeneration = new List<Robot>();
             
-            GeneticOperations.SetGenerationReproductionProbabilities(pLastGeneration);
+            //GeneticOperations.SetGenerationReproductionProbabilities(pLastGeneration);
 
             while (newGeneration.Count < Constants.PopulationSize)
             {
@@ -63,7 +63,7 @@ namespace RobotGA_Project.GASolution
                 robot.CalculateFitness();
                 fitnessList.Add(robot.Fitness);
             }
-
+            GeneticOperations.SetGenerationReproductionProbabilities(Population);
             FitnessStandardDeviation = MathematicalOperations.StandardDeviation(fitnessList);
         }
 
