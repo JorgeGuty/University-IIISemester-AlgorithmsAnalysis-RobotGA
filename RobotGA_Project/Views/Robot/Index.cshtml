@@ -3,7 +3,7 @@
     ViewBag.Title = "Robot";
 }
 <div class="jumbotron">
-    <h1>RB - @Model.Id</h1>
+    <h1>RB - @Model.GenerationId - @Model.Id</h1>
     <dl class="dl-vertical">
         <dt>
             @Html.DisplayNameFor(model => model.Cost)
@@ -30,75 +30,428 @@
 </div>
 <hr />
 <div class="row">
-    @if(Model.ParentA != null)
+    
+    @if (Model.ParentA != null)
     {
-        <h3>Parents</h3>
-        <hr />
+        <div class="col-md-12">
+            <h3>Parents</h3>
+            <hr/>
+                <table class="table table-striped">
+                    <thead>
+                    <tr>
+                        <th>
+                            @Html.DisplayNameFor(model => model.Id)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.Cost)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.Fitness)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.ReproductionProbability)
+                        </th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr>
+                        <th>
+                            RB-@Html.DisplayFor(model => Model.ParentA.GenerationId)-@Html.DisplayFor(model => Model.ParentA.Id)
+                        </th>
+                        <th>
+                            @Html.DisplayFor(model => model.ParentA.Cost)
+                        </th>
+                        <th>
+                            @Html.DisplayFor(model => model.ParentA.Fitness)
+                        </th>
+                        <th>
+                            @Html.DisplayFor(model => model.ParentA.ReproductionProbability)
+                        </th>
+                        <th>
+                            @Html.ActionLink(
+                                "Details",
+                                "Index",
+                                "Robot",
+                                new {pRobotId = Model.ParentA.Id, pGenerationId = Model.ParentA.GenerationId},
+                                new {@class = "btn btn-primary btn-lg"})
+                        </th>
+                    </tr>
+                    <tr>
+                        <th>
+                            RB-@Html.DisplayFor(model => Model.ParentB.GenerationId)-@Html.DisplayFor(model => Model.ParentB.Id)
+                        </th>
+                        <th>
+                            @Html.DisplayFor(model => model.ParentB.Cost)
+                        </th>
+                        <th>
+                            @Html.DisplayFor(model => model.ParentB.Fitness)
+                        </th>
+                        <th>
+                            @Html.DisplayFor(model => model.ParentB.ReproductionProbability)
+                        </th>
+                        <th>
+                            @Html.ActionLink(
+                                "Details",
+                                "Index",
+                                "Robot",
+                                new {pRobotId = Model.ParentB.Id, pGenerationId = Model.ParentB.GenerationId},
+                                new {@class = "btn btn-primary btn-lg"})
+                        </th>
+                    </tr>
+                    </tbody>
+                </table>
+            <hr/>
+        </div>
+    }
+
+    <div class="col-md-6">
+        <h2>Hardware</h2>
+        <hr/>
         <table class="table table-striped">
             <thead>
-            <tr>
-                <th>
-                    @Html.DisplayNameFor(model => model.Id)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.Cost)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.Fitness)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.ReproductionProbability)
-                </th>
-            </tr>
+                <tr>
+                    <th>
+                        Feature
+                    </th>
+                    <th>
+                        Value
+                    </th>                
+                    <th>
+                        Genotype
+                    </th>
+                    <th>
+                        Chromosome
+                    </th>
+                </tr>
             </thead>
             <tbody>
-            <tr>
-                <th>
-                    RB-@Html.DisplayFor(model => model.ParentA.Id)
-                </th>
-                <th>
-                    @Html.DisplayFor(model => model.ParentA.Cost)
-                </th>
-                <th>
-                    @Html.DisplayFor(model => model.ParentA.Fitness)
-                </th>
-                <th>
-                    @Html.DisplayFor(model => model.ParentA.ReproductionProbability)
-                </th>
-                <th>
-                    @Html.ActionLink(
-                        "Details",
-                        "Index",
-                        "Robot",
-                        new {pRobotId = Model.ParentA.Id, pGenerationId = Model.ParentA.GenerationId},
-                        new {@class = "btn btn-primary btn-lg"})
-                </th>
-            </tr>
-            <tr>
-                <th>
-                    RB-@Html.DisplayFor(model => model.ParentB.Id)
-                </th>
-                <th>
-                    @Html.DisplayFor(model => model.ParentB.Cost)
-                </th>
-                <th>
-                    @Html.DisplayFor(model => model.ParentB.Fitness)
-                </th>
-                <th>
-                    @Html.DisplayFor(model => model.ParentB.ReproductionProbability)
-                </th>
-                <th>
-                    @Html.ActionLink(
-                        "Details",
-                        "Index",
-                        "Robot",
-                        new {pRobotId = Model.ParentB.Id, pGenerationId = Model.ParentB.GenerationId},
-                        new {@class = "btn btn-primary btn-lg"})
-                </th>
-            </tr>
+                <tr>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Hardware.BatteryEnergy)
+                    </th>
+                    <th>
+                        @Html.DisplayFor(model => model.Hardware.BatteryEnergy)
+                    </th>
+                    <th>
+                        @Html.DisplayFor(model => model.Hardware.BatteryGenotype)
+                    </th>
+                    <th>
+                        @Html.DisplayFor(model => model.Hardware.BatteryChromosome)
+                    </th>
+                </tr>
+                <tr>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Hardware.EngineCapacity)
+                    </th>                
+                    <th>
+                        @Html.DisplayFor(model => model.Hardware.EngineCapacity)
+                    </th>
+                    <th>
+                        @Html.DisplayFor(model => model.Hardware.BatteryGenotype)
+                    </th>
+                    <th>
+                        @Html.DisplayFor(model => model.Hardware.BatteryChromosome)
+                    </th>
+                </tr>
+                <tr>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Hardware.CameraRange)
+                    </th>                
+                    <th>
+                        @Html.DisplayFor(model => model.Hardware.CameraRange)
+                    </th>
+                    <th>
+                        @Html.DisplayFor(model => model.Hardware.CameraGenotype)
+                    </th>
+                    <th>
+                        @Html.DisplayFor(model => model.Hardware.CameraChromosome)
+                    </th>
+                </tr>            
             </tbody>
         </table>
         <hr/>
-    }
+        <h4>Parents Comparison</h4>
+        <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>
+                                Feature
+                            </th>
+                            <th>
+                                Self
+                            </th>                
+                            <th>
+                                RB-@Html.DisplayFor(model => Model.ParentA.GenerationId)-@Html.DisplayFor(model => Model.ParentA.Id)
+                            </th>
+                            <th>
+                                RB-@Html.DisplayFor(model => Model.ParentB.GenerationId)-@Html.DisplayFor(model => Model.ParentB.Id)
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <th>
+                                @Html.DisplayNameFor(model => model.Hardware.BatteryEnergy)
+                            </th>
+                            <th>
+                                @Html.DisplayFor(model => model.Hardware.BatteryEnergy)
+                            </th>
+                            <th>
+                                @Html.DisplayFor(model => model.ParentA.Hardware.BatteryEnergy)
+                            </th>
+                            <th>
+                                @Html.DisplayFor(model => model.ParentB.Hardware.BatteryEnergy)
+                            </th>
+                        </tr>
+                        <tr>
+                            <th>
+                                @Html.DisplayNameFor(model => model.Hardware.EngineCapacity)
+                            </th>                
+                            <th>
+                                @Html.DisplayFor(model => model.Hardware.EngineCapacity)
+                            </th>
+                            <th>
+                                @Html.DisplayFor(model => model.ParentA.Hardware.EngineCapacity)
+                            </th>
+                            <th>
+                                @Html.DisplayFor(model => model.ParentB.Hardware.EngineCapacity)
+                            </th>
+                        </tr>
+                        <tr>
+                            <th>
+                                @Html.DisplayNameFor(model => model.Hardware.CameraRange)
+                            </th>                
+                            <th>
+                                @Html.DisplayFor(model => model.Hardware.CameraRange)
+                            </th>
+                            <th>
+                                @Html.DisplayFor(model => model.ParentA.Hardware.CameraRange)
+                            </th>
+                            <th>
+                                @Html.DisplayFor(model =>  model.ParentB.Hardware.CameraRange)
+                            </th>
+                        </tr>            
+                    </tbody>
+                </table>
+    </div>
+    
+    <div class="col-md-6">
+        <h2>Software</h2>
+        <hr/>
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>
+                        Trait
+                    </th>
+                    <th>
+                        Value
+                    </th>
+                    <th>
+                        Chromosome
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Software.MoveTowardsEnd)
+                    </th>
+                    <th>
+                        @Html.DisplayFor(model => model.Software.MoveTowardsEnd)
+                    </th>
+                    <th>
+                        @Html.DisplayFor(model => model.Software.MoveTowardsEndChromosome)
+                    </th>
+                </tr>
+                <tr>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Software.MoveAwayFromEnd)
+                    </th>
+                    <th>
+                        @Html.DisplayFor(model => model.Software.MoveAwayFromEnd)
+                    </th>
+                    <th>
+                        @Html.DisplayFor(model => model.Software.MoveAwayFromEndChromosome)
+                    </th>
+                </tr>            
+                <tr>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Software.MoveToPassableTerrain)
+                    </th>
+                    <th>
+                        @Html.DisplayFor(model => model.Software.MoveToPassableTerrain)
+                    </th>
+                    <th>
+                        @Html.DisplayFor(model => model.Software.MoveToPassableTerrainChromosome)
+                    </th>
+                </tr>
+                <tr>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Software.MoveToNonPassableTerrain)
+                    </th>
+                    <th>
+                        @Html.DisplayFor(model => model.Software.MoveToNonPassableTerrain)
+                    </th>
+                    <th>
+                        @Html.DisplayFor(model => model.Software.MoveToNonPassableTerrainChromosome)
+                    </th>
+                </tr>
+                <tr>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Software.SpendTheLessEnergy)
+                    </th>
+                    <th>
+                        @Html.DisplayFor(model => model.Software.SpendTheLessEnergy)
+                    </th>
+                    <th>
+                        @Html.DisplayFor(model => model.Software.SpendTheLessEnergyChromosome)
+                    </th>
+                </tr>
+                <tr>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Software.SpendTheMostEnergy)
+                    </th>
+                    <th>
+                        @Html.DisplayFor(model => model.Software.SpendTheMostEnergy)
+                    </th>
+                    <th>
+                        @Html.DisplayFor(model => model.Software.SpendTheMostEnergyChromosome)
+                    </th>
+                </tr>
+                <tr>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Software.SpendNormalEnergy)
+                    </th>
+                    <th>
+                        @Html.DisplayFor(model => model.Software.SpendNormalEnergy)
+                    </th>
+                    <th>
+                        @Html.DisplayFor(model => model.Software.SpendNormalEnergyChromosome)
+                    </th>
+                </tr>
+            </tbody>
+        </table>
+        <hr/>
+        <h4>Parents Comparison</h4>
+        <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>
+                                Trait
+                            </th>
+                            <th>
+                                Self
+                            </th>
+                            <th>
+                                RB-@Html.DisplayFor(model => Model.ParentA.GenerationId)-@Html.DisplayFor(model => Model.ParentA.Id)
+                            </th>
+                            <th>
+                                RB-@Html.DisplayFor(model => Model.ParentB.GenerationId)-@Html.DisplayFor(model => Model.ParentB.Id)
+                            </th>                            
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <th>
+                                @Html.DisplayNameFor(model => model.Software.MoveTowardsEnd)
+                            </th>
+                            <th>
+                                @Html.DisplayFor(model => model.Software.MoveTowardsEnd)
+                            </th>
+                            <th>
+                                @Html.DisplayFor(model => model.ParentA.Software.MoveTowardsEnd)
+                            </th>
+                            <th>
+                                @Html.DisplayFor(model => model.ParentB.Software.MoveTowardsEnd)
+                            </th>                            
+                        </tr>
+                        <tr>
+                            <th>
+                                @Html.DisplayNameFor(model => model.Software.MoveAwayFromEnd)
+                            </th>
+                            <th>
+                                @Html.DisplayFor(model => model.Software.MoveAwayFromEnd)
+                            </th>
+                            <th>
+                                @Html.DisplayFor(model => model.ParentA.Software.MoveAwayFromEnd)
+                            </th>
+                            <th>
+                                @Html.DisplayFor(model => model.ParentB.Software.MoveAwayFromEnd)
+                            </th>    
+                        </tr>            
+                        <tr>
+                            <th>
+                                @Html.DisplayNameFor(model => model.Software.MoveToPassableTerrain)
+                            </th>
+                            <th>
+                                @Html.DisplayFor(model => model.Software.MoveToPassableTerrain)
+                            </th>
+                            <th>
+                                @Html.DisplayFor(model => model.ParentA.Software.MoveToPassableTerrain)
+                            </th>
+                            <th>
+                                @Html.DisplayFor(model => model.ParentB.Software.MoveToPassableTerrain)
+                            </th>    
+                        </tr>
+                        <tr>
+                            <th>
+                                @Html.DisplayNameFor(model => model.Software.MoveToNonPassableTerrain)
+                            </th>
+                            <th>
+                                @Html.DisplayFor(model => model.Software.MoveToNonPassableTerrain)
+                            </th>
+                            <th>
+                                @Html.DisplayFor(model => model.ParentA.Software.MoveToNonPassableTerrain)
+                            </th>
+                            <th>
+                                @Html.DisplayFor(model => model.ParentB.Software.MoveToNonPassableTerrain)
+                            </th>    
+                        </tr>
+                        <tr>
+                            <th>
+                                @Html.DisplayNameFor(model => model.Software.SpendTheLessEnergy)
+                            </th>
+                            <th>
+                                @Html.DisplayFor(model => model.Software.SpendTheLessEnergy)
+                            </th>
+                            <th>
+                                @Html.DisplayFor(model => model.ParentA.Software.SpendTheLessEnergy)
+                            </th>
+                            <th>
+                                @Html.DisplayFor(model => model.ParentB.Software.SpendTheLessEnergy)
+                            </th>    
+                        </tr>
+                        <tr>
+                            <th>
+                                @Html.DisplayNameFor(model => model.Software.SpendTheMostEnergy)
+                            </th>
+                            <th>
+                                @Html.DisplayFor(model => model.Software.SpendTheMostEnergy)
+                            </th>
+                            <th>
+                                @Html.DisplayFor(model => model.ParentA.Software.SpendTheMostEnergy)
+                            </th>
+                            <th>
+                                @Html.DisplayFor(model => model.ParentB.Software.SpendTheMostEnergy)
+                            </th>    
+                        </tr>
+                        <tr>
+                            <th>
+                                @Html.DisplayNameFor(model => model.Software.SpendNormalEnergy)
+                            </th>
+                            <th>
+                                @Html.DisplayFor(model => model.Software.SpendNormalEnergy)
+                            </th>
+                            <th>
+                                @Html.DisplayFor(model => model.ParentA.Software.SpendNormalEnergy)
+                            </th>
+                            <th>
+                                @Html.DisplayFor(model => model.ParentB.Software.SpendNormalEnergy)
+                            </th>    
+                        </tr>
+                    </tbody>
+                </table>
+    </div>
 </div>
 <hr />

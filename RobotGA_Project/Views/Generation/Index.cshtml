@@ -13,51 +13,52 @@
 <h3>Population</h3>
 <hr />
 <div class="row">
-    <table class="table table-striped">
-        <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.Population[0].Id)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Population[0].Cost)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Population[0].Fitness)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Population[0].ReproductionProbability)
-            </th>                
-        </tr>
-        </thead>
-        <tbody>
-        @foreach(var robot in @Model.Population)
-        {
+    <div class="col-md-12">
+        <table class="table table-striped">
+            <thead>
             <tr>
                 <th>
-                    RB-@Html.DisplayFor(model => robot.Id)
+                    @Html.DisplayNameFor(model => model.Population[0].Id)
                 </th>
                 <th>
-                    @Html.DisplayFor(model => robot.Cost)
+                    @Html.DisplayNameFor(model => model.Population[0].Cost)
                 </th>
                 <th>
-                    @Html.DisplayFor(model => robot.Fitness)
+                    @Html.DisplayNameFor(model => model.Population[0].Fitness)
                 </th>
                 <th>
-                    @Html.DisplayFor(model => robot.ReproductionProbability)
-                </th>
-                <th>
-                    @Html.ActionLink(
-                        "Details",
-                        "Index",
-                        "Robot",
-                        new {pRobotId = robot.Id, pGenerationId = robot.GenerationId},
-                        new {@class = "btn btn-primary btn-lg"})
+                    @Html.DisplayNameFor(model => model.Population[0].ReproductionProbability)
                 </th>
             </tr>
-        }
-        </tbody>
-    </table>
-    <hr />
-
+            </thead>
+            <tbody>
+            @foreach (var robot in @Model.Population)
+            {
+                <tr>
+                    <th>
+                        RB-@Html.DisplayFor(model => robot.GenerationId)-@Html.DisplayFor(model => robot.Id)
+                    </th>
+                    <th>
+                        @Html.DisplayFor(model => robot.Cost)
+                    </th>
+                    <th>
+                        @Html.DisplayFor(model => robot.Fitness)
+                    </th>
+                    <th>
+                        @Html.DisplayFor(model => robot.ReproductionProbability)
+                    </th>
+                    <th>
+                        @Html.ActionLink(
+                            "Details",
+                            "Index",
+                            "Robot",
+                            new {pRobotId = robot.Id, pGenerationId = robot.GenerationId},
+                            new {@class = "btn btn-primary btn-lg"})
+                    </th>
+                </tr>
+            }
+            </tbody>
+        </table>
+    </div>
+    <hr/>
 </div>

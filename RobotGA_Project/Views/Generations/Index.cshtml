@@ -12,8 +12,9 @@
 </div>
 
 <div class="row">
-    <table class="table table-striped">
-        <thead>
+    <div class="col-md-12">
+        <table class="table table-striped">
+            <thead>
             <tr>
                 <th>
                     @Html.DisplayNameFor(model => model.Id)
@@ -22,9 +23,9 @@
                     @Html.DisplayNameFor(model => model.FitnessStandardDeviation)
                 </th>
             </tr>
-        </thead>
-        <tbody>
-            @foreach(var generation in @Model)
+            </thead>
+            <tbody>
+            @foreach (var generation in @Model)
             {
                 <tr>
                     <th>
@@ -43,7 +44,8 @@
                     </th>
                 </tr>
             }
-        </tbody>
-    </table>
-    <hr />
+            </tbody>
+        </table>
+    </div>
+    <hr/>
 </div>
