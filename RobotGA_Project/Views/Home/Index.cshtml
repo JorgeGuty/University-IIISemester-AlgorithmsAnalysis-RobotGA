@@ -7,5 +7,12 @@
     <p class="lead">
         Genetic algorithm that evolves a population of robots so that they learn to cross a predefined map with different types of obstacles and terrain.
     </p>
-    <p><a href="https://asp.net" class="btn btn-primary btn-lg">Run GA&raquo;</a></p>
+    <p>
+        @Html.ActionLink(
+            "Run Genetic Algorithm",
+            "RunGA",
+            "Home",
+            null,
+            new {@class = "btn btn-primary btn-lg"})
+    </p>
 </div>

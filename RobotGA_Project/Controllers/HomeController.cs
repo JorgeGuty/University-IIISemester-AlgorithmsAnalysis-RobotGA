@@ -11,46 +11,50 @@ namespace RobotGA_Project.Controllers
     {
         public ActionResult Index()
         {
-           
-            Robot testbot = new Robot();
-            Console.WriteLine(testbot);
-            Console.WriteLine(testbot.VisionRange.Nodes.Count);
-            
             /*
-           Robot robota = new Robot();
-           Console.WriteLine(testbot.ToString());
-           Console.WriteLine(robota.ToString());
-
-           Robot robito = new Robot(testbot, robota, 10);
-           Console.WriteLine(robito.ToString());
-           
-           robito = new Robot(robota, testbot, 10);
-           Console.WriteLine(robito.ToString());
-           robito.CalculateFitness();
-           
-           Console.WriteLine(robito.Fitness);
-           
+             Robot testbot = new Robot();
+             Console.WriteLine(testbot);
+             Console.WriteLine(testbot.VisionRange.Nodes.Count);
+             
+             
+            Robot robota = new Robot();
+            Console.WriteLine(testbot.ToString());
+            Console.WriteLine(robota.ToString());
+ 
+            Robot robito = new Robot(testbot, robota, 10);
+            Console.WriteLine(robito.ToString());
             
-            Generation gen0 = new Generation();
+            robito = new Robot(robota, testbot, 10);
+            Console.WriteLine(robito.ToString());
+            robito.CalculateFitness();
             
-            foreach (var robot in gen0.Population)
-            {
-                Console.WriteLine(robot);
-                Console.WriteLine(1);
-            }
+            Console.WriteLine(robito.Fitness);
             
-            Console.WriteLine("*********************************");
-            
-            Generation gen1 = new Generation(gen0.Population);
-
-            foreach (var robot in gen1.Population)
-            {
-                Console.WriteLine(robot);
-                Console.WriteLine(2);
-
-            }
-            //*/
+             
+             Generation gen0 = new Generation();
+             
+             foreach (var robot in gen0.Population)
+             {
+                 Console.WriteLine(robot);
+                 Console.WriteLine(1);
+             }
+             
+             Console.WriteLine("*********************************");
+             
+             Generation gen1 = new Generation(gen0.Population);
+ 
+             foreach (var robot in gen1.Population)
+             {
+                 Console.WriteLine(robot);
+                 Console.WriteLine(2);
+             }
+             //*/
             return View();
+        }
+
+        public ActionResult RunGA()
+        {
+            return RedirectToAction("Index", "Generations");
         }
 
         public ActionResult About()

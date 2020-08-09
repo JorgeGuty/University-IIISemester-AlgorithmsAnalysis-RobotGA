@@ -5,8 +5,31 @@ namespace RobotGA_Project.Models.ModelControllers
 {
     public static class GenerationModelController
     {
-
-        public static List<RobotModel> GenerateGenerationOfModels(Generation pGeneration, int pGenerationId)
+        public static List<GenerationModel> GenerationModels { get; set; }
+        
+        public static void SetListOfGenerationModels(List<Generation> pGenerations)
+        {
+            List<GenerationModel> generations = new List<GenerationModel>();
+            for (int index = 0; index < pGenerations.Count; index++)
+            {
+                var generationModel = GenerateGenerationModel(pGenerations[index], index);
+                generations.Add(generationModel);
+            }
+            GenerationModels = generations;
+        }
+        
+        private static GenerationModel GenerateGenerationModel(Generation pGeneration, int pGenerationId)
+        {
+            GenerationModel model = new GenerationModel()
+            {
+                Id = pGenerationId,
+                Population = GenerateGenerationOfModels(pGeneration,pGenerationId),
+                FitnessStandardDeviation = pGeneration.FitnessStandardDeviation
+            };
+            return model;
+        }
+        
+        private static List<RobotModel> GenerateGenerationOfModels(Generation pGeneration, int pGenerationId)
         {
             List<RobotModel> generationOfModels = new List<RobotModel>();
             for (int index = 0; index < generationOfModels.Count; index++)
@@ -16,6 +39,7 @@ namespace RobotGA_Project.Models.ModelControllers
             }
             return generationOfModels;
         }
+        
         private static RobotModel GenerateRobotModel(Robot pRobot, int pId, int pGenerationId)
         {
             RobotModel model = new RobotModel()
