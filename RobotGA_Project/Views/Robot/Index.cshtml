@@ -282,40 +282,41 @@
         }
         <h2>Route</h2>
         <hr/>
-            <table class="style1">
-                @for (int row = 0; row < Constants.MapDimensions; row++)
-                {
-                    <tr class="normalGround">
-                        @for (int column = 0; column < Constants.MapDimensions; column++)
+        <table class="style1">
+            @for (int row = 0; row < Constants.MapDimensions; row++)
+            {
+                <tr class="normalGround">
+                    @for (int column = 0; column < Constants.MapDimensions; column++)
+                    {
+                        var coord = (row,column);
+                        if (coord.Item1 == Constants.StartIndex.Item1 && coord.Item2 == Constants.StartIndex.Item2)
                         {
-                            var coord = (row,column);
-                            if (coord.Item1 == Constants.StartIndex.Item1 && coord.Item2 == Constants.StartIndex.Item2)
-                            {
-                                <th class="startPointGround"></th>
-                            } 
-                            else if (coord.Item1 == Constants.GoalIndex.Item1 && coord.Item2 == Constants.GoalIndex.Item2)
-                            {
-                                <th class="goalGround"></th>
-                            }
-                            else if (Model.Route.Contains(coord))
-                            {
-                                var appearances = MathematicalOperations.CountAppearances(Model.Route, coord);
-                                var r = Constants.HEAT_INITIAL_COLOR.Item1 - Constants.R_DECREMENT_RATIO * (appearances - 1);
-                                if (r < 0){r = 0;}
-                                var g = Constants.HEAT_INITIAL_COLOR.Item2 - Constants.G_DECREMENT_RATIO * (appearances - 1);
-                                if (g < 0){g = 0;}
-                                var b = Constants.HEAT_INITIAL_COLOR.Item3 - Constants.B_DECREMENT_RATIO * (appearances - 1);    
-                                if (b < 0){b = 0;}
-                                <th class="wentThroughGround" style="background-color: rgb(@r,@g,@b)"></th>
-                            }
-                            else
-                            {
-                                <th class="normalGround"></th>
-                            }
+                            <th class="startPointGround"></th>
+                        } 
+                        else if (coord.Item1 == Constants.GoalIndex.Item1 && coord.Item2 == Constants.GoalIndex.Item2)
+                        {
+                            <th class="goalGround"></th>
                         }
-                    </tr>
-                }
-            </table>
+                        else if (Model.Route.Contains(coord))
+                        {
+                            var appearances = MathematicalOperations.CountAppearances(Model.Route, coord);
+                            var r = Constants.HEAT_INITIAL_COLOR.Item1 - Constants.R_DECREMENT_RATIO * (appearances - 1);
+                            if (r < 0){r = 0;}
+                            var g = Constants.HEAT_INITIAL_COLOR.Item2 - Constants.G_DECREMENT_RATIO * (appearances - 1);
+                            if (g < 0){g = 0;}
+                            var b = Constants.HEAT_INITIAL_COLOR.Item3 - Constants.B_DECREMENT_RATIO * (appearances - 1);    
+                            if (b < 0){b = 0;}
+                            <th class="wentThroughGround" style="background-color: rgb(@r,@g,@b)"></th>
+                        }
+                        else
+                        {
+                            <th class="normalGround"></th>
+                        }
+                    }
+                </tr>
+            }
+        </table>
+        
     </div>
     
     <div class="col-md-6">
@@ -538,6 +539,27 @@
                 </tbody>
             </table>
         }
+    <h2>Moves</h2>
+        <table class="table table-striped">
+            @{
+                var index = 0; 
+            }
+            @while (true)
+            {
+                if (index == Model.Route.Count){ break;}
+                <tr>
+                    @for (int columnCount = 0; columnCount < Constants.MOVES_DISPLAY_COLUMNCOUNT; columnCount++)
+                    {
+                        var tag = index + 1;
+                        <th>
+                            <p>@tag) [@Model.Route[index].Item1, @Model.Route[index].Item2]</p>
+                        </th>
+                        index++;
+                        if (index == Model.Route.Count){ break;}
+                    }
+                </tr>
+            }
+        </table>
     </div>
 
 </div>

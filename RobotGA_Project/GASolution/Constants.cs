@@ -31,6 +31,7 @@ namespace RobotGA_Project.GASolution
         public static readonly int R_DECREMENT_RATIO = 25;
         public static readonly int G_DECREMENT_RATIO = 45;
         public static readonly int B_DECREMENT_RATIO = 35;
+        public static readonly int MOVES_DISPLAY_COLUMNCOUNT = 5;
 
         // Map Constants
         

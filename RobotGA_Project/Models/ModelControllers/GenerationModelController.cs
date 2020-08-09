@@ -80,6 +80,7 @@ namespace RobotGA_Project.Models.ModelControllers
                 Software = GenerateSoftwareModel(pRobot.Software),
                 Route = pRobot.Route
             };
+            /*
             model.Route.Add((10,10));
            
             model.Route.Add((10,11));
@@ -106,7 +107,7 @@ namespace RobotGA_Project.Models.ModelControllers
             model.Route.Add((10,15));
             model.Route.Add((10,15));
             model.Route.Add((10,15));
-            
+            //*/
             return model;
         }
         
