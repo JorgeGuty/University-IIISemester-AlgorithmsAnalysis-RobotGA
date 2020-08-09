@@ -112,6 +112,7 @@
         </e>
         <e p="Shared" t="Include">
           <e p="_Layout.cshtml" t="Include" />
+          <e p="_Layout_WithGenerationOption.cshtml" t="Include" />
           <e p="Error.cshtml" t="Include" />
         </e>
         <e p="Web.config" t="Include" />

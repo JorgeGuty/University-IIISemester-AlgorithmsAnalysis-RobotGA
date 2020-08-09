@@ -60,6 +60,16 @@ namespace RobotGA_Project.GASolution
             return (float) summation / pQuantity;
         }
 
+        public static int CountAppearances<T>(List<T> pList, T pElement)
+        {
+            var count = 0;
+            foreach (var element in pList)
+            {
+                if (element.Equals(pElement)) count++;
+            }
+
+            return count;
+        }
 
 
     }

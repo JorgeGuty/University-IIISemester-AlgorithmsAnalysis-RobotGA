@@ -173,6 +173,7 @@
     <Content Include="Views\Generations\Index.cshtml" />
     <Content Include="Views\Generation\Index.cshtml" />
     <Content Include="Views\Robot\Index.cshtml" />
+    <Content Include="Views\Shared\_Layout_WithGenerationOption.cshtml" />
     <Content Include="Web.config" />
     <Content Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
