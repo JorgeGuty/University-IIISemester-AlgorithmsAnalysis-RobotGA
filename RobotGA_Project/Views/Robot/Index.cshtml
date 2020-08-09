@@ -1,31 +1,104 @@
-﻿@{
-    ViewBag.Title = "Home Page";
+﻿@model RobotGA_Project.Models.RobotModel
+@{
+    ViewBag.Title = "Robot";
 }
-
 <div class="jumbotron">
-    <h1>ASP.NET</h1>
-    <p class="lead">ASP.NET is a free web framework for building great Web sites and Web applications using HTML, CSS and JavaScript.</p>
-    <p><a href="https://asp.net" class="btn btn-primary btn-lg">Learn more &raquo;</a></p>
-</div>
-
-<div class="row">
-    <div class="col-md-4">
-        <h2>Getting started</h2>
+    <h1>RB - @Model.Id</h1>
+    <dl class="dl-vertical">
+        <dt>
+            @Html.DisplayNameFor(model => model.Cost)
+        </dt>
         <p>
-            ASP.NET MVC gives you a powerful, patterns-based way to build dynamic websites that
-            enables a clean separation of concerns and gives you full control over markup
-            for enjoyable, agile development.
+            @Html.DisplayFor(model => model.Cost)
         </p>
-        <p><a class="btn btn-default" href="https://go.microsoft.com/fwlink/?LinkId=301865">Learn more &raquo;</a></p>
-    </div>
-    <div class="col-md-4">
-        <h2>Get more libraries</h2>
-        <p>NuGet is a free Visual Studio extension that makes it easy to add, remove, and update libraries and tools in Visual Studio projects.</p>
-        <p><a class="btn btn-default" href="https://go.microsoft.com/fwlink/?LinkId=301866">Learn more &raquo;</a></p>
-    </div>
-    <div class="col-md-4">
-        <h2>Web Hosting</h2>
-        <p>You can easily find a web hosting company that offers the right mix of features and price for your applications.</p>
-        <p><a class="btn btn-default" href="https://go.microsoft.com/fwlink/?LinkId=301867">Learn more &raquo;</a></p>
+        <dt>
+            @Html.DisplayNameFor(model => model.Fitness)
+        </dt>
+        <p>
+            @Html.DisplayFor(model => model.Fitness)
+        </p>
+        <dt>
+            @Html.DisplayNameFor(model => model.ReproductionProbability)
+        </dt>
+        <p>
+            @Html.DisplayFor(model => model.ReproductionProbability)
+        </p>
+    </dl>
+    <div>
+        <a href="javascript:history.go(-1)">Back</a>
     </div>
 </div>
+<hr />
+<div class="row">
+    @if(Model.ParentA != null)
+    {
+        <h3>Parents</h3>
+        <hr />
+        <table class="table table-striped">
+            <thead>
+            <tr>
+                <th>
+                    @Html.DisplayNameFor(model => model.Id)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Cost)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Fitness)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.ReproductionProbability)
+                </th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+                <th>
+                    RB-@Html.DisplayFor(model => model.ParentA.Id)
+                </th>
+                <th>
+                    @Html.DisplayFor(model => model.ParentA.Cost)
+                </th>
+                <th>
+                    @Html.DisplayFor(model => model.ParentA.Fitness)
+                </th>
+                <th>
+                    @Html.DisplayFor(model => model.ParentA.ReproductionProbability)
+                </th>
+                <th>
+                    @Html.ActionLink(
+                        "Details",
+                        "Index",
+                        "Robot",
+                        new {pRobotId = Model.ParentA.Id, pGenerationId = Model.ParentA.GenerationId},
+                        new {@class = "btn btn-primary btn-lg"})
+                </th>
+            </tr>
+            <tr>
+                <th>
+                    RB-@Html.DisplayFor(model => model.ParentB.Id)
+                </th>
+                <th>
+                    @Html.DisplayFor(model => model.ParentB.Cost)
+                </th>
+                <th>
+                    @Html.DisplayFor(model => model.ParentB.Fitness)
+                </th>
+                <th>
+                    @Html.DisplayFor(model => model.ParentB.ReproductionProbability)
+                </th>
+                <th>
+                    @Html.ActionLink(
+                        "Details",
+                        "Index",
+                        "Robot",
+                        new {pRobotId = Model.ParentB.Id, pGenerationId = Model.ParentB.GenerationId},
+                        new {@class = "btn btn-primary btn-lg"})
+                </th>
+            </tr>
+            </tbody>
+        </table>
+        <hr/>
+    }
+</div>
+<hr />

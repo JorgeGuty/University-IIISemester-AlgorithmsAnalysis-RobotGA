@@ -8,6 +8,8 @@ namespace RobotGA_Project.GASolution
 {
     public class Robot
     {
+
+        public int Id { get; set; }
         
         public float ReproductionProbability { get; set; }
         
@@ -28,7 +30,7 @@ namespace RobotGA_Project.GASolution
         
         public (int,int) Position { get; set; } // (Rows,Columns)
 
-        public Robot(Robot pParentA, Robot pParentB, int pHardwarePartitionIndex, int pSoftwarePartitionIndex)
+        public Robot(Robot pParentA, Robot pParentB, int pHardwarePartitionIndex, int pSoftwarePartitionIndex, int pId)
         {
             
             /*
@@ -46,11 +48,11 @@ namespace RobotGA_Project.GASolution
                 new Software(pParentA.Software.CompleteChromosome, pParentB.Software.CompleteChromosome,
                     pSoftwarePartitionIndex);
 
-            InitializeFields();
+            InitializeFields(pId);
             
         }
 
-        public Robot()
+        public Robot(int pId)
         {
             /*
              * Method that initializes a Robot with random values. 
@@ -62,12 +64,13 @@ namespace RobotGA_Project.GASolution
             Hardware = new Hardware();
             Software = new Software();
             
-            InitializeFields();
+            InitializeFields(pId);
             
         }
 
-        private void InitializeFields()
+        private void InitializeFields(int pId)
         {
+            Id = pId;
             Fitness = 0;
             ReproductionProbability = 0f;
             Route = new List<(int, int)>();

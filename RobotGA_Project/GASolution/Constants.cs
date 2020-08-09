@@ -25,6 +25,9 @@ namespace RobotGA_Project.GASolution
         public static readonly int BasicEnergyConsumption = 1;
         public static readonly int BasicCost = 1;
         
+        
+        public static readonly int GEN_ZERO_PARENT_ID = -1;
+        
         // Map Constants
         
         public static readonly int MapDimensions = 20; // Height and width of the squared map

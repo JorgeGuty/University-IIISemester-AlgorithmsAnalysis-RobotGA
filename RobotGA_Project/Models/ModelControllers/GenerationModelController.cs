@@ -6,17 +6,15 @@ namespace RobotGA_Project.Models.ModelControllers
 {
     public static class GenerationModelController
     {
-        public static List<GenerationModel> GenerationModels { get; set; }
+        public static List<GenerationModel> GenerationModels  = new List<GenerationModel>();
         
         public static void SetListOfGenerationModels(List<Generation> pGenerations)
         {
-            List<GenerationModel> generations = new List<GenerationModel>();
             for (int index = 0; index < pGenerations.Count; index++)
             {
                 var generationModel = GenerateGenerationModel(pGenerations[index], index);
-                generations.Add(generationModel);
+                GenerationModels.Add(generationModel);
             }
-            GenerationModels = generations;
         }
         
         private static GenerationModel GenerateGenerationModel(Generation pGeneration, int pGenerationId)
@@ -32,23 +30,49 @@ namespace RobotGA_Project.Models.ModelControllers
         
         private static List<RobotModel> GenerateGenerationOfModels(Generation pGeneration, int pGenerationId)
         {
-            Console.WriteLine("Robots--------------------------------------------------");
             List<RobotModel> generationOfModels = new List<RobotModel>();
             for (int index = 0; index < pGeneration.Population.Count; index++)
             {
-                RobotModel newModel = GenerateRobotModel(pGeneration.Population[index], index, pGenerationId);
-                generationOfModels.Add(newModel);
-                Console.WriteLine(newModel.Cost);
+                try
+                {
+                    var parentAId = pGeneration.Population[index].ParentA.Id;
+                    var parentBId = pGeneration.Population[index].ParentB.Id;
+                    var newModel = GenerateRobotModel(pGeneration.Population[index], pGenerationId, parentAId,
+                        parentBId);
+                    generationOfModels.Add(newModel);
+                }
+                catch (NullReferenceException nullRef)
+                {
+                    var newModel = GenerateRobotModel(pGeneration.Population[index], pGenerationId, Constants.GEN_ZERO_PARENT_ID,
+                        Constants.GEN_ZERO_PARENT_ID);
+                    generationOfModels.Add(newModel);
+                }
+                
             }
             return generationOfModels;
         }
         
-        private static RobotModel GenerateRobotModel(Robot pRobot, int pId, int pGenerationId)
+        private static RobotModel GenerateRobotModel(Robot pRobot, int pGenerationId, int pParentAId, int pParentBId)
         {
+
+            RobotModel parentA = null;
+            RobotModel parentB = null;
+
+            if (pParentAId != Constants.GEN_ZERO_PARENT_ID)
+            {
+                foreach (var robotModel in GenerationModels[pGenerationId-1].Population) // Checks the previous gen to get the parents
+                {
+                    if (robotModel.Id == pParentAId) parentA = robotModel;
+                    if (robotModel.Id == pParentBId) parentB = robotModel;
+                }
+            }
+            
             RobotModel model = new RobotModel()
             {
-                Id = pId,
+                Id = pRobot.Id,
                 GenerationId = pGenerationId,
+                ParentA = parentA,
+                ParentB = parentB,
                 Fitness = pRobot.Fitness,
                 ReproductionProbability = pRobot.ReproductionProbability,
                 Cost = pRobot.TotalCost,

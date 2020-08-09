@@ -16,10 +16,6 @@ namespace RobotGA_Project.Controllers
                 {
                     
                     GenerationModel selectedGeneration = generationModel;
-                    foreach (RobotModel robot in selectedGeneration.Population)
-                    {
-                        Console.WriteLine(robot.Cost);
-                    }
                     return View(selectedGeneration);
                 }
             }
