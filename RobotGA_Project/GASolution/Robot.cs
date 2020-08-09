@@ -1,5 +1,7 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using RobotGA_Project.GASolution.Data_Structures.Graph;
+using RobotGA_Project.GASolution.Data_Structures.MapStructures;
 
 namespace RobotGA_Project.GASolution
 {
@@ -65,7 +67,7 @@ namespace RobotGA_Project.GASolution
         {
             Fitness = 0;
             ReproductionProbability = 0f;
-            Route = new List<(int, int)>();
+            Route = new List<Terrain>();
             Position = Constants.StartIndex;
             TotalCost = Hardware.Cost;
             SetVisionRange();
@@ -132,7 +134,7 @@ namespace RobotGA_Project.GASolution
                if (aboveIndex.Item2 >= 0)
                {
                    aboveNode =  new Node<(int,int)>(aboveIndex);
-                   VisionRange.AddNode(aboveNode);
+                   VisionRange.AddNode(aboveNode)    ;
                    VisionRange.AddArc(0, positionNode, aboveNode);
                }
                
@@ -187,8 +189,243 @@ namespace RobotGA_Project.GASolution
 
         }
 
-        public void CalculateArchesWeights() {
+
+        private int ExecuteTraceOfPositions(int variableIndex, int constantIndex, string direction, Map map, List<int> energiesSpent) {
+            var returnSum = 0;
+            var energy = 0;
+            switch (direction) {
+                case "U":
+
+                    while (variableIndex<Position.Item1) {
+                        var terrain = map.TerrainMap[variableIndex, constantIndex];
+                        if (terrain.DifficultyLevel>Hardware.Engine.MaxTerrainDifficulty) {
+                            returnSum += Software.MoveToNonPassableTerrain;
+                        }
+                        else {
+                            returnSum += Software.MoveToPassableTerrain;
+                        }
+
+                        if (MathematicalOperations.DistanceBetweenPoints((variableIndex, constantIndex), Constants.GoalIndex) < 
+                            MathematicalOperations.DistanceBetweenPoints(Position, Constants.GoalIndex)) {
+
+                            returnSum += Software.MoveTowardsEnd;
+                        }
+                        else {
+                            returnSum += Software.MoveAwayFromEnd;
+                        }
+
+                        energy += terrain.EnergyConsumption + Hardware.Camera.EnergyConsumption;
+                        
+                        variableIndex++;
+                    }
+                    energiesSpent.Add(energy);
+                    return returnSum;
+                
+                case "D":
+                    
+                    while (variableIndex>Position.Item1) {
+                        var terrain = map.TerrainMap[variableIndex, constantIndex];
+                        if (terrain.DifficultyLevel>Hardware.Engine.MaxTerrainDifficulty) {
+                            returnSum += Software.MoveToNonPassableTerrain;
+                        }
+                        else {
+                            returnSum += Software.MoveToPassableTerrain;
+                        }
+
+                        if (MathematicalOperations.DistanceBetweenPoints((variableIndex, constantIndex), Constants.GoalIndex) < 
+                            MathematicalOperations.DistanceBetweenPoints(Position, Constants.GoalIndex)) {
+
+                            returnSum += Software.MoveTowardsEnd;
+                        }
+                        else {
+                            returnSum += Software.MoveAwayFromEnd;
+                        }
+
+                        energy += terrain.EnergyConsumption + Hardware.Camera.EnergyConsumption;
+                        
+                        variableIndex--;
+                    }
+                    energiesSpent.Add(energy);
+                    return returnSum;
+                
+                case "R":
+                    
+                    while (variableIndex>Position.Item2) {
+                        var terrain = map.TerrainMap[constantIndex, variableIndex];
+                        if (terrain.DifficultyLevel>Hardware.Engine.MaxTerrainDifficulty) {
+                            returnSum += Software.MoveToNonPassableTerrain;
+                        }
+                        else {
+                            returnSum += Software.MoveToPassableTerrain;
+                        }
+
+                        if (MathematicalOperations.DistanceBetweenPoints((constantIndex, variableIndex), Constants.GoalIndex) < 
+                            MathematicalOperations.DistanceBetweenPoints(Position, Constants.GoalIndex)) {
+
+                            returnSum += Software.MoveTowardsEnd;
+                        }
+                        else {
+                            returnSum += Software.MoveAwayFromEnd;
+                        }
+
+                        energy += terrain.EnergyConsumption + Hardware.Camera.EnergyConsumption;
+                        
+                        variableIndex--;
+                    }
+                    energiesSpent.Add(energy);
+                    return returnSum;
+                
+                case "L":
+
+                    while (variableIndex<Position.Item2) {
+                        var terrain = map.TerrainMap[constantIndex, variableIndex];
+                        if (terrain.DifficultyLevel>Hardware.Engine.MaxTerrainDifficulty) {
+                            returnSum += Software.MoveToNonPassableTerrain;
+                        }
+                        else {
+                            returnSum += Software.MoveToPassableTerrain;
+                        }
+
+                        if (MathematicalOperations.DistanceBetweenPoints((constantIndex, variableIndex), Constants.GoalIndex) < 
+                            MathematicalOperations.DistanceBetweenPoints(Position, Constants.GoalIndex)) {
+
+                            returnSum += Software.MoveTowardsEnd;
+                        }
+                        else {
+                            returnSum += Software.MoveAwayFromEnd;
+                        }
+
+                        energy += terrain.EnergyConsumption + Hardware.Camera.EnergyConsumption;
+                        
+                        variableIndex++;
+                    }
+                    energiesSpent.Add(energy);
+                    return returnSum;
+            }
+                
             
+            return 0;
+        }
+
+        public void CalculateArchesWeights(Map map) {
+            
+            var energiesSpent = new List<int>();
+            var sums = new List<int>();
+            Node<(int, int)> centralNode = null;
+            
+            foreach (var visionRangeNode in VisionRange.Nodes) {
+
+                var totalForArch = 0;
+                
+                if (visionRangeNode.Object.Item1==Position.Item1+1 &&
+                    visionRangeNode.Object.Item2==Position.Item2 ) {
+                    //1 Down: (i+1, j) 
+                    totalForArch = ExecuteTraceOfPositions(Position.Item1+1, Position.Item2, "D", map, energiesSpent);
+
+
+                } else if (visionRangeNode.Object.Item1==Position.Item1+2 &&
+                           visionRangeNode.Object.Item2==Position.Item2 ) {
+                    //2 Down: (i+2, j) 
+                    totalForArch = ExecuteTraceOfPositions(Position.Item1+2, Position.Item2, "D", map, energiesSpent);
+                    
+                } else if (visionRangeNode.Object.Item1==Position.Item1+3 &&
+                           visionRangeNode.Object.Item2==Position.Item2 ) {
+                    //3 Down: (i+3, j)
+                    totalForArch = ExecuteTraceOfPositions(Position.Item1+3, Position.Item2, "D", map, energiesSpent);
+
+                } else if (visionRangeNode.Object.Item1==Position.Item1 &&
+                           visionRangeNode.Object.Item2==Position.Item2+1 ) {
+                    //1 Right: (i, j+1) 
+                    totalForArch = ExecuteTraceOfPositions(Position.Item2+1, Position.Item1, "R", map, energiesSpent);
+
+                } else if (visionRangeNode.Object.Item1==Position.Item1 &&
+                           visionRangeNode.Object.Item2==Position.Item2+2 ) {
+                    //2 Right: (i, j+2)
+                    totalForArch = ExecuteTraceOfPositions(Position.Item2+2, Position.Item1, "R", map, energiesSpent);
+                    
+                } else if (visionRangeNode.Object.Item1==Position.Item1 &&
+                           visionRangeNode.Object.Item2==Position.Item2+3 ) {
+                    //3 Right: (i, j+3) 
+                    totalForArch = ExecuteTraceOfPositions(Position.Item2+3, Position.Item1, "R", map, energiesSpent);
+                    
+                } else if (visionRangeNode.Object.Item1==Position.Item1-1 &&
+                           visionRangeNode.Object.Item2==Position.Item2 ) {
+                    //1 Up: (i-1, j) 
+                    totalForArch = ExecuteTraceOfPositions(Position.Item1-1, Position.Item2, "U", map, energiesSpent);
+                    
+                } else if (visionRangeNode.Object.Item1==Position.Item1-2 &&
+                           visionRangeNode.Object.Item2==Position.Item2 ) {
+                    //2 Up: (i-2, j) 
+                    totalForArch = ExecuteTraceOfPositions(Position.Item1-2, Position.Item2, "U", map, energiesSpent);
+                    
+                } else if (visionRangeNode.Object.Item1==Position.Item1-3 &&
+                           visionRangeNode.Object.Item2==Position.Item2 ) {
+                    //3 Up: (i-3, j)
+                    totalForArch = ExecuteTraceOfPositions(Position.Item1-3, Position.Item2, "U", map, energiesSpent);
+                    
+                } else if (visionRangeNode.Object.Item1==Position.Item1 &&
+                           visionRangeNode.Object.Item2==Position.Item2-1 ) {
+                    //1 Left: (i, j-1) 
+                    totalForArch = ExecuteTraceOfPositions(Position.Item2-1, Position.Item1, "L", map, energiesSpent);
+                    
+                } else if (visionRangeNode.Object.Item1==Position.Item1 &&
+                           visionRangeNode.Object.Item2==Position.Item2-2 ) {
+                    //2 Left: (i, j-2)
+                    totalForArch = ExecuteTraceOfPositions(Position.Item2-2, Position.Item1, "L", map, energiesSpent);
+                    
+                } else if (visionRangeNode.Object.Item1==Position.Item1 &&
+                           visionRangeNode.Object.Item2==Position.Item2-3 ) {
+                    //3 Left: (i, j-3) 
+                    totalForArch = ExecuteTraceOfPositions(Position.Item2-3, Position.Item1, "L", map, energiesSpent);
+                } else if (visionRangeNode.Object.Item1==Position.Item1 &&
+                           visionRangeNode.Object.Item2==Position.Item2 ) {
+                    //Position
+                    centralNode = visionRangeNode;
+                } 
+
+
+                sums.Add(totalForArch);
+            }
+
+            var highestCompare = 0;
+            var highestIndex = 0;
+            for (var i = 0; i < energiesSpent.Count; i++) {
+                if (energiesSpent[i]>highestCompare) {
+                    highestCompare = energiesSpent[i];
+                    highestIndex = i;
+                }
+            }
+
+            var lowestCompare = highestCompare;
+            var lowestIndex = 0; 
+            
+            for (var i = 0; i < energiesSpent.Count; i++) {
+                if (energiesSpent[i]<lowestCompare) {
+                    lowestCompare = energiesSpent[i];
+                    lowestIndex = i;
+                }
+            }
+
+            
+            for (var i = 0; i < sums.Count; i++) {
+                if (i==highestIndex) {
+                    sums[i] += Software.SpendTheMostEnergy;        
+                }
+                else if (i==lowestIndex) {
+                    sums[i] += Software.SpendTheLessEnergy;
+                }
+                else {
+                    sums[i] += Software.SpendNormalEnergy;
+                }
+            }
+
+            float totalSumOfEverything = sums.Sum();
+            
+            for (var i = 0; i < VisionRange.Nodes.Count; i++) {
+                if (VisionRange.Nodes[i].Object!=centralNode.Object) {
+                    VisionRange.SetWeightOfArc(sums[i] / totalSumOfEverything, centralNode, VisionRange.Nodes[i]);    
+                }
+            }
         }
     }
 }

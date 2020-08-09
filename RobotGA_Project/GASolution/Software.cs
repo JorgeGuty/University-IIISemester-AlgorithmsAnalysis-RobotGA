@@ -53,8 +53,8 @@
         }
 
 
-        public Software()
-        {
+        public Software() {
+            
             /*
              * Initializes a software system with random values.
              * The order of the CompleteChromosome matters.

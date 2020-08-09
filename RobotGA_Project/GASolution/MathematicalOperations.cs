@@ -34,6 +34,9 @@ namespace RobotGA_Project.GASolution
             return Convert.ToInt32(pBinaryValue, 2);
         }
 
+        public static double DistanceBetweenPoints((int, int) a, (int, int) b) {
+            return Math.Sqrt(Math.Pow(b.Item1 - a.Item1, 2) + Math.Pow(b.Item2 - a.Item2, 2));
+        }
 
 
     }
