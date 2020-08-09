@@ -1,0 +1,52 @@
+﻿@using System.Web.Mvc.Html
+@using RobotGA_Project.GASolution
+@using RobotGA_Project.Models
+@model IEnumerable<RobotGA_Project.Models.GenerationModel>
+@{
+    ViewBag.Title = "Generations";
+    Layout = "~/Views/Shared/_Layout_WithGenerationOption.cshtml";
+    //List<GenerationModel> generationModels = ViewData["Models"] as List<GenerationModel>;
+}
+
+<div class="jumbotron">
+    <h1>Resulting Generations</h1>
+</div>
+
+<div class="row">
+    <div class="col-md-12">
+        <table class="table table-striped">
+            <thead>
+            <tr>
+                <th>
+                    @Html.DisplayNameFor(model => model.Id)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.FitnessStandardDeviation)
+                </th>
+            </tr>
+            </thead>
+            <tbody>
+            @foreach (var generation in @Model)
+            {
+                <tr>
+                    <th>
+                        Gen-@Html.DisplayFor(model => generation.Id)
+                    </th>
+                    <th>
+                        @Html.DisplayFor(model => generation.FitnessStandardDeviation)
+                    </th>
+                    <th>
+                        @Html.ActionLink(
+                            "Details",
+                            "Index",
+                            "Generation",
+                            new {pGenerationId = generation.Id},
+                            new {@class = "btn btn-primary btn-lg"})
+                    </th>
+                </tr>
+            }
+            </tbody>
+        </table>
+    </div>
+    <hr/>
+</div>

@@ -2,6 +2,7 @@
 using System.Web.Mvc;
 using RobotGA_Project.GASolution;
 using RobotGA_Project.GASolution.Data_Structures.MapStructures;
+using RobotGA_Project.Models.ModelControllers;
 
 namespace RobotGA_Project.Controllers
 {
@@ -42,8 +43,8 @@ namespace RobotGA_Project.Controllers
             //     Console.WriteLine(2);
             // }
 
-            var map = MapLoader.LoadMap(@"C:\GitHub_Projects\University_RobotGA\RobotGA_Project\GASolution\Data Structures\MapStructures\MapFiles\map1.txt");
-            var testBot = new Robot();
+            //var map = MapLoader.LoadMap(@"C:\GitHub_Projects\University_RobotGA\RobotGA_Project\GASolution\Data Structures\MapStructures\MapFiles\map1.txt");
+            //var testBot = new Robot();
 
 
             return View();

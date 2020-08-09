@@ -25,7 +25,10 @@
         <e p="Site.css" t="Include" />
       </e>
       <e p="Controllers" t="Include">
+        <e p="GenerationController.cs" t="Include" />
+        <e p="GenerationsController.cs" t="Include" />
         <e p="HomeController.cs" t="Include" />
+        <e p="RobotController.cs" t="Include" />
       </e>
       <e p="favicon.ico" t="Include" />
       <e p="fonts" t="Include">
@@ -64,7 +67,15 @@
       </e>
       <e p="Global.asax" t="Include" />
       <e p="Global.asax.cs" t="Include" />
-      <e p="Models" t="Include" />
+      <e p="Models" t="Include">
+        <e p="GenerationModel.cs" t="Include" />
+        <e p="HardwareModel.cs" t="Include" />
+        <e p="ModelControllers" t="Include">
+          <e p="GenerationModelController.cs" t="Include" />
+        </e>
+        <e p="RobotModel.cs" t="Include" />
+        <e p="SoftwareModel.cs" t="Include" />
+      </e>
       <e p="obj" t="ExcludeRecursive" />
       <e p="packages" t="ExcludeRecursive" />
       <e p="packages.config" t="Include" />
@@ -92,13 +103,23 @@
       </e>
       <e p="Views" t="Include">
         <e p="_ViewStart.cshtml" t="Include" />
+        <e p="Generation" t="Include">
+          <e p="Index.cshtml" t="Include" />
+        </e>
+        <e p="Generations" t="Include">
+          <e p="Index.cshtml" t="Include" />
+        </e>
         <e p="Home" t="Include">
           <e p="About.cshtml" t="Include" />
           <e p="Contact.cshtml" t="Include" />
           <e p="Index.cshtml" t="Include" />
         </e>
+        <e p="Robot" t="Include">
+          <e p="Index.cshtml" t="Include" />
+        </e>
         <e p="Shared" t="Include">
           <e p="_Layout.cshtml" t="Include" />
+          <e p="_Layout_WithGenerationOption.cshtml" t="Include" />
           <e p="Error.cshtml" t="Include" />
         </e>
         <e p="Web.config" t="Include" />

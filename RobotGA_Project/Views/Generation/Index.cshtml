@@ -1,0 +1,65 @@
+﻿@model RobotGA_Project.Models.GenerationModel
+@{
+    ViewBag.Title = "Generation";
+    Layout = "~/Views/Shared/_Layout_WithGenerationOption.cshtml";
+}
+
+<div class="jumbotron">
+    <h1>Gen-@Model.Id</h1>
+    <p> Fitness Standard Deviation: @Model.FitnessStandardDeviation </p>
+    <div>
+        <a href="javascript:history.go(-1)">Back</a>
+    </div>
+</div>
+<h3>Population</h3>
+<hr />
+<div class="row">
+    <div class="col-md-12">
+        <table class="table table-striped">
+            <thead>
+            <tr>
+                <th>
+                    @Html.DisplayNameFor(model => model.Population[0].Id)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Population[0].Cost)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Population[0].Fitness)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Population[0].ReproductionProbability)
+                </th>
+            </tr>
+            </thead>
+            <tbody>
+            @foreach (var robot in @Model.Population)
+            {
+                <tr>
+                    <th>
+                        RB-@Html.DisplayFor(model => robot.GenerationId)-@Html.DisplayFor(model => robot.Id)
+                    </th>
+                    <th>
+                        @Html.DisplayFor(model => robot.Cost)
+                    </th>
+                    <th>
+                        @Html.DisplayFor(model => robot.Fitness)
+                    </th>
+                    <th>
+                        @Html.DisplayFor(model => robot.ReproductionProbability)
+                    </th>
+                    <th>
+                        @Html.ActionLink(
+                            "Details",
+                            "Index",
+                            "Robot",
+                            new {pRobotId = robot.Id, pGenerationId = robot.GenerationId},
+                            new {@class = "btn btn-primary btn-lg"})
+                    </th>
+                </tr>
+            }
+            </tbody>
+        </table>
+    </div>
+    <hr/>
+</div>

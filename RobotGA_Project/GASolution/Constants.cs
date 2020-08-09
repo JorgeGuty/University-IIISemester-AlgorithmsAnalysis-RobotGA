@@ -18,17 +18,25 @@ namespace RobotGA_Project.GASolution
 
         public static readonly int CompleteChromosomeSize = ChromosomeSize * ChromosomeQuantity;
         
-        public static readonly int PopulationSize = 2;
+        public static readonly int PopulationSize = 20;
         
         public static readonly int MutationProbability = 4;
         
         public static readonly int BasicEnergyConsumption = 1;
         public static readonly int BasicCost = 1;
         
+        
+        public static readonly int GEN_ZERO_PARENT_ID = -1;
+        public static readonly (int, int, int) HEAT_INITIAL_COLOR = (201, 60, 32);
+        public static readonly int R_DECREMENT_RATIO = 25;
+        public static readonly int G_DECREMENT_RATIO = 45;
+        public static readonly int B_DECREMENT_RATIO = 35;
+        public static readonly int MOVES_DISPLAY_COLUMNCOUNT = 5;
+
         // Map Constants
         
         public static readonly int MapDimensions = 20; // Height and width of the squared map
-        public static readonly (int, int) StartIndex = (1, 1); // Starting position (X,Y)
+        public static readonly (int, int) StartIndex = (MapDimensions - 1, 0); // Starting position (X,Y)
         public static readonly (int, int) GoalIndex = (0, MapDimensions - 1); // Goal position (X,Y)
         
         // Terrain Constants

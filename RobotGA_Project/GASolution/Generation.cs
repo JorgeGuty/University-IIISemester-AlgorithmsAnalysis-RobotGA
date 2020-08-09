@@ -9,6 +9,7 @@ namespace RobotGA_Project.GASolution
          * Class that stores and manages the reproduction, mutation and fitness of a population.
          */
         public List<Robot> Population { get; set; }
+        public float FitnessStandardDeviation { get; set; }
 
         public Generation(List<Robot> pLastGeneration)
         {
@@ -29,7 +30,7 @@ namespace RobotGA_Project.GASolution
             Population = new List<Robot>();
             for (int size = 0; size < Constants.PopulationSize; size++)
             {
-                Population.Add(new Robot());
+                Population.Add(new Robot(size));
             }
             FitGeneration();
         }
@@ -38,14 +39,14 @@ namespace RobotGA_Project.GASolution
         {
             List<Robot> newGeneration = new List<Robot>();
             
-            GeneticOperations.SetGenerationReproductionProbabilities(pLastGeneration);
+            //GeneticOperations.SetGenerationReproductionProbabilities(pLastGeneration);
 
             while (newGeneration.Count < Constants.PopulationSize)
             {
                 Robot parentA = SelectMatingPartner(pLastGeneration);
                 Robot parentB = SelectMatingPartner(pLastGeneration);
 
-                var (child1, child2) = ReproduceIndividuals(parentA, parentB);
+                var (child1, child2) = ReproduceIndividuals(parentA, parentB, newGeneration.Count);
 
                 newGeneration.Add(child1);
                 newGeneration.Add(child2);
@@ -56,10 +57,14 @@ namespace RobotGA_Project.GASolution
 
         private void FitGeneration()
         {
+            var fitnessList = new List<int>();
             foreach (var robot in Population)
             {
                 robot.CalculateFitness();
+                fitnessList.Add(robot.Fitness);
             }
+            GeneticOperations.SetGenerationReproductionProbabilities(Population);
+            FitnessStandardDeviation = MathematicalOperations.StandardDeviation(fitnessList);
         }
 
         private void GenerationalMutation()
@@ -114,18 +119,17 @@ namespace RobotGA_Project.GASolution
             return pGeneration[selectedIndex];
         }
 
-        private (Robot, Robot) ReproduceIndividuals(Robot pParentA, Robot pParentB)
+        private (Robot, Robot) ReproduceIndividuals(Robot pParentA, Robot pParentB, int pId)
         {
             int hardwarePartitionIndex =
                 MathematicalOperations.RandomIntegerInRange(1, Constants.CompleteChromosomeSize);
             int softwarePartitionIndex = 
                 MathematicalOperations.RandomIntegerInRange(1, Constants.SoftwareChromosomeSize);
             
-            Robot child1 = new Robot(pParentA, pParentB, hardwarePartitionIndex, softwarePartitionIndex);
-            Robot child2 = new Robot(pParentB, pParentA, hardwarePartitionIndex, softwarePartitionIndex);
+            Robot child1 = new Robot(pParentA, pParentB, hardwarePartitionIndex, softwarePartitionIndex, pId);
+            Robot child2 = new Robot(pParentB, pParentA, hardwarePartitionIndex, softwarePartitionIndex,pId + 1);
 
             return (child1, child2);
         }
-        
     }
 }

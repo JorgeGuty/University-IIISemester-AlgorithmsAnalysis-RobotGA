@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace RobotGA_Project.GASolution
 {
@@ -36,6 +38,41 @@ namespace RobotGA_Project.GASolution
 
         public static double DistanceBetweenPoints((int, int) a, (int, int) b) {
             return Math.Sqrt(Math.Pow(b.Item1 - a.Item1, 2) + Math.Pow(b.Item2 - a.Item2, 2));
+        }
+        
+        public static float StandardDeviation(List<int> pPopulation)
+        {
+            var quantity = pPopulation.Count;
+            return (float)Math.Sqrt(Variance(pPopulation, quantity));
+        }
+
+        public static float Variance(List<int> pPopulation, int pQuantity)
+        {
+            var average = Average(pPopulation, pQuantity);
+            var summation = 0f;
+            foreach (var value in pPopulation)
+            {
+                var difference = value - average;
+                summation += (float)Math.Pow(difference, 2);
+            }
+            return summation / pQuantity;
+        }
+
+        public static float Average(List<int> pPopulation, int pQuantity)
+        {
+            var summation = pPopulation.Sum();
+            return (float) summation / pQuantity;
+        }
+
+        public static int CountAppearances<T>(List<T> pList, T pElement)
+        {
+            var count = 0;
+            foreach (var element in pList)
+            {
+                if (element.Equals(pElement)) count++;
+            }
+
+            return count;
         }
 
 
