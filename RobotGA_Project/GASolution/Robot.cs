@@ -14,6 +14,8 @@ namespace RobotGA_Project.GASolution
 
         public int Id { get; set; }
         
+        private bool Won { get; set; }
+        
         public float ReproductionProbability { get; set; }
         
         public Robot ParentA { get; set; }
@@ -87,11 +89,13 @@ namespace RobotGA_Project.GASolution
             TotalCost = Hardware.Cost;
             BestDistance = Constants.MaxFinalDistancePossible;
             Position = Constants.StartIndex;
+            Won = false;
             SetVisionRange();
         }
         
         public void CalculateFitness()
         {
+            
             /*
              * Function set to calculate the fitness of an individual
              */
@@ -99,7 +103,7 @@ namespace RobotGA_Project.GASolution
             var distancesToEnd = new List<int>();
             var energiesPerStep = new List<int>();
             var stepsForward = new List<int>();
-            var repeatedStepsQuantities = new List<int>();
+            var nonRepeatedStepsQuantities = new List<int>();
             
             for (int times = 0; times < Constants.TRIES_TOTAL; times++)
             {
@@ -109,8 +113,9 @@ namespace RobotGA_Project.GASolution
                 SetVisionRange();
                 var life = Live();
                 stepsForward.Add(life.Item1);
-                distancesToEnd.Add(life.Item2);
-                energiesPerStep.Add(life.Item3);
+                nonRepeatedStepsQuantities.Add(life.Item2);
+                distancesToEnd.Add(life.Item3);
+                energiesPerStep.Add(life.Item4);
                 
                 if (life.Item2 <= BestDistance)
                 {
@@ -129,15 +134,20 @@ namespace RobotGA_Project.GASolution
             int averageEnergyPerStep =
                 (int)MathematicalOperations.Average(energiesPerStep, energiesPerStep.Count);
 
-            int averageRepeatedSteps;
+            int averageNonRepeatedSteps = 
+                (int)MathematicalOperations.Average(nonRepeatedStepsQuantities, nonRepeatedStepsQuantities.Count);
 
             int distanceScore = Constants.MaxFinalDistancePossible - averageDistanceToGoal;
             int stepsScore = Constants.MaxEnergyPossible - averageStepsForward;
             int energyPerStepScore = Constants.MaxEnergyPerStepPossible - averageEnergyPerStep;
             int costScore = Constants.MaxCostPossible - TotalCost;
+            int repeatedStepsScore = averageNonRepeatedSteps;
             
             int distanceFit = 
                 Constants.FIRST_PRIORITY_VALUE * GeneticOperations.NormalizeFitnessScore(distanceScore, Constants.MaxFinalDistancePossible);
+            int nonRepeatedStepsFit =
+                Constants.SECOND_PRIORITY_VALUE *
+                GeneticOperations.NormalizeFitnessScore(repeatedStepsScore, Constants.MaxNonRepeatedStepsPossible);
             int stepsFit = 
                 Constants.SECOND_PRIORITY_VALUE * GeneticOperations.NormalizeFitnessScore(stepsScore, Constants.MaxEnergyPossible);
             int energyFit = 
@@ -145,33 +155,35 @@ namespace RobotGA_Project.GASolution
             int costFit = 
                 Constants.LAST_PRIORITY_VALUE * GeneticOperations.NormalizeFitnessScore(costScore, Constants.MaxCostPossible);
             
-            Fitness = distanceFit + stepsFit + energyFit + costFit;
+            int wonFit = Constants.WinBonus;
+            
+            Fitness = distanceFit + nonRepeatedStepsFit + stepsFit + energyFit + costFit;
+            if (Won) Fitness += wonFit;
+            
         }
 
-        public (int, int, int) Live()
+        public (int, int, int, int) Live()
         {
-            
             /*
-             *  Returns: (totalStepsForward, distanceToGoal, energyPerStep)
+             *  Returns: (totalStepsForward, totalRepeatedSteps, distanceToGoal, energyPerStep)
              */
             
             var totalStepsForward = 0;
+            var totalNonRepeatedSteps = 0;
             var totalSteps = 0;
             var totalEnergyConsume = 0;
 
-            var won = false;
-            
-            while (EnergyLeft > 0 && !won)
+            while (EnergyLeft > 0 && !Won)
             {
-                var (stepsForward, steps, energyConsumed) = MovementDecision();
+                var (stepsForward, nonRepeatedSteps, steps, energyConsumed) = MovementDecision();
                 totalStepsForward += stepsForward;
+                totalNonRepeatedSteps += nonRepeatedSteps;
                 totalSteps += steps;
                 totalEnergyConsume += energyConsumed;
-
                 if (Position.Item1 == Constants.GoalIndex.Item1 && Position.Item2 == Constants.GoalIndex.Item2)
                 {
-                    Console.WriteLine(Id);
-                    won = true;
+                    Console.WriteLine("Won "+Id);
+                    Won = true;
                 }
             }
 
@@ -180,14 +192,14 @@ namespace RobotGA_Project.GASolution
             if (totalSteps == 0) totalSteps = 1;
             var energyPerStep = totalEnergyConsume / totalSteps;
             
-            return (totalStepsForward, distanceToGoal, energyPerStep);
+            return (totalStepsForward, totalNonRepeatedSteps, distanceToGoal, energyPerStep);
 
         }
         
-        public (int, int, int) MovementDecision()
+        public (int, int, int, int) MovementDecision()
         {
             /*
-             * Returns: (stepsForward, totalSteps, energyConsumed)
+             * Returns: (stepsForward, repeatedSteps totalSteps, energyConsumed)
              */
             var randomDecision = MathematicalOperations.Random0To1Float();
             var accumulatedPercentage = 0f;
@@ -209,9 +221,10 @@ namespace RobotGA_Project.GASolution
             
         }
 
-        public (int, int, int) Move((int, int) pPosition)
+        public (int, int, int, int) Move((int, int) pPosition)
         {
             var stepsForward = 0;
+            var nonRepeatedSteps = 0;
             var energyConsumed = 0;
             var totalSteps = 0;
             
@@ -244,9 +257,10 @@ namespace RobotGA_Project.GASolution
 
                     if (currentDistanceToGoal < futureDistanceToGoal) stepsForward++;
                     
+                    if (!LastTry.Contains((row, column))) nonRepeatedSteps++;
+                    
                     var energyConsume = Hardware.Camera.EnergyConsumption + terrainInPosition.EnergyConsumption;
                     
-
                     EnergyLeft -= energyConsume;
                     
                     totalSteps++;
@@ -258,7 +272,7 @@ namespace RobotGA_Project.GASolution
                 }
             }
             
-            return (stepsForward, totalSteps, energyConsumed);
+            return (stepsForward, nonRepeatedSteps, totalSteps, energyConsumed);
 
         }
 

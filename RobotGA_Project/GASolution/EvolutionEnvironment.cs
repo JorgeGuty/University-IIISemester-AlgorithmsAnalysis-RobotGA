@@ -13,11 +13,15 @@ namespace RobotGA_Project.GASolution
         {
             new Generation()
         };
-
-
+        
         public static void SimulateEvolution()
         {
-            
+            var gen0 = new Generation();
+            var generations = new List<Generation> {gen0};
+            for (int i = 1; i <= 100; i++)
+            {
+                generations.Add(new Generation(generations[i-1].Population));
+            }
         }
 
 

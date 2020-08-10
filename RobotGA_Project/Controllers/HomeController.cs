@@ -56,7 +56,7 @@ namespace RobotGA_Project.Controllers
         {
             var gen0 = new Generation();
             var generations = new List<Generation> {gen0};
-            for (int i = 1; i <= 100; i++)
+            for (int i = 1; i <= 500; i++)
             {
                 generations.Add(new Generation(generations[i-1].Population));
             }
@@ -71,7 +71,7 @@ namespace RobotGA_Project.Controllers
 
             return View();
         }
-
+        
         public ActionResult Contact()
         {
             ViewBag.Message = "Your contact page.";

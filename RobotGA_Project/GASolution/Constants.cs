@@ -133,14 +133,16 @@ namespace RobotGA_Project.GASolution
         public static readonly int FOURTH_PRIORITY_VALUE = 1;
         public static readonly int LAST_PRIORITY_VALUE = 1;
 
-        public static readonly int FitnessCriteriaQuantity = 4;
+        public static readonly int FitnessCriteriaQuantity = 5;
+
+        public static readonly int WinBonus = 700;
 
         public static readonly int MaxFinalDistancePossible =
             (int)MathematicalOperations.DistanceBetweenPoints(StartIndex, GoalIndex);
 
         public static readonly int MaxEnergyPossible = (BatteryTypeQuantity - 1 ) * EnergyIncrement + BasicEnergy;
 
-        public static readonly int MaxRepeatedStepsPossible = MaxEnergyPossible / 2;
+        public static readonly int MaxNonRepeatedStepsPossible = MaxEnergyPossible / 2;
         
         public static readonly int MaxEnergyPerStepPossible = 
             (PassableTerrainTypeQuantity - 1) * TerrainEnergyConsumptionIncrement + BasicEnergyConsumption + 
