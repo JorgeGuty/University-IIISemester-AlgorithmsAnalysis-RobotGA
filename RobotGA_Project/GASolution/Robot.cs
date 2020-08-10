@@ -121,15 +121,13 @@ namespace RobotGA_Project.GASolution
                 if (life.Item3 <= BestDistance)
                 {
                     BestTry.Clear();
-                    if (Won)
+                    foreach ((int, int) tuple in LastTry)
                     {
-                        foreach ((int, int) tuple in LastTry)
-                        {
-                            BestTry.Add(tuple);
-                        } 
+                        BestTry.Add(tuple);
                     }
                     BestDistance = life.Item3;
                 }
+                
             }
             
             int averageDistanceToGoal =
