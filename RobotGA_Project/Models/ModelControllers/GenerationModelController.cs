@@ -23,7 +23,7 @@ namespace RobotGA_Project.Models.ModelControllers
             {
                 Id = pGenerationId,
                 Population = GenerateGenerationOfModels(pGeneration,pGenerationId),
-                FitnessStandardDeviation = pGeneration.FitnessStandardDeviation
+                FitnessAverage = pGeneration.FitnessAverage
             };
             return model;
         }

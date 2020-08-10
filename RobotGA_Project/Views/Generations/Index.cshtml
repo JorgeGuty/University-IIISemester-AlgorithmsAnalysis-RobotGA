@@ -7,12 +7,88 @@
     Layout = "~/Views/Shared/_Layout_WithGenerationOption.cshtml";
     //List<GenerationModel> generationModels = ViewData["Models"] as List<GenerationModel>;
 }
-
+<head runat="server">
+    <title></title>
+    
+    <style type="text/css">
+        .typeGround
+        {
+        padding: 7px;
+        text-align: center;
+        border: 1px solid lightgray;
+        }
+    </style>
+    <style type="text/css">
+        .goalGround
+        {
+        padding: 7px;
+        text-align: center;
+        border: 1px solid lightgray;
+        background-color: #c0a16b;
+        }
+    </style>
+    <style type="text/css">
+        .startPointGround
+        {
+        padding: 7px;
+        text-align: center;
+        border: 1px solid lightgray;
+        background-color: #3c3c3c;
+        }
+    </style>    
+</head>
 <div class="jumbotron">
-    <h1>Resulting Generations</h1>
+
+    <h1>Result</h1>
+    <h3>Map</h3>
+        <table class="style1">
+            @for (int row = 0; row < Constants.MapDimensions; row++)
+            {
+                <tr class="normalGround">
+                    @for (int column = 0; column < Constants.MapDimensions; column++)
+                    {
+                        var coord = (row,column);
+                        if (coord.Item1 == Constants.StartIndex.Item1 && coord.Item2 == Constants.StartIndex.Item2)
+                        {
+                            <th class="startPointGround"></th>
+                        }
+                        else if (coord.Item1 == Constants.GoalIndex.Item1 && coord.Item2 == Constants.GoalIndex.Item2)
+                        {
+                            <th class="goalGround"></th>
+                        }
+                        else
+                        {
+
+                            (int, int, int) rgb;
+                            var terrainInCoord = EvolutionEnvironment.Map.TerrainMap[coord.Item1, coord.Item2];
+                            if (terrainInCoord == Constants.EasyTerrain)
+                            {
+                                rgb = (153,255,153);
+                            }
+                            else if (terrainInCoord == Constants.MediumTerrain)
+                            {
+                                rgb = (51,255,51);
+                            }
+                            else if (terrainInCoord == Constants.DifficultTerrain)
+                            {
+                                rgb = (0,204,76);
+                            }
+                            else
+                            {
+                                rgb = (0,0,0);
+
+                            }
+                            <th class="typeGround" style="background-color: rgb(@rgb.Item1,@rgb.Item2,@rgb.Item3)"></th>
+                        }
+                    }
+                </tr>
+            }
+        </table>
 </div>
 
 <div class="row">
+    <h3>Resulting generations</h3>
+    <hr/>
     <div class="col-md-12">
         <table class="table table-striped">
             <thead>
@@ -21,7 +97,7 @@
                     @Html.DisplayNameFor(model => model.Id)
                 </th>
                 <th>
-                    @Html.DisplayNameFor(model => model.FitnessStandardDeviation)
+                    @Html.DisplayNameFor(model => model.FitnessAverage)
                 </th>
             </tr>
             </thead>
@@ -33,7 +109,7 @@
                         Gen-@Html.DisplayFor(model => generation.Id)
                     </th>
                     <th>
-                        @Html.DisplayFor(model => generation.FitnessStandardDeviation)
+                        @Html.DisplayFor(model => generation.FitnessAverage)
                     </th>
                     <th>
                         @Html.ActionLink(

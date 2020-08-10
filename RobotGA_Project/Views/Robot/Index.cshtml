@@ -413,6 +413,54 @@
                 </tr>
             }
         </table>
+        <h3>Map</h3>
+        <table class="style1">
+            @for (int row = 0; row < Constants.MapDimensions; row++)
+            {
+                <tr class="normalGround">
+                    @for (int column = 0; column < Constants.MapDimensions; column++)
+                    {
+                        var coord = (row,column);
+                        if (coord.Item1 == Constants.StartIndex.Item1 && coord.Item2 == Constants.StartIndex.Item2)
+                        {
+                            <th class="startPointGround"></th>
+                        } 
+                        else if (coord.Item1 == Constants.GoalIndex.Item1 && coord.Item2 == Constants.GoalIndex.Item2)
+                        {
+                            <th class="goalGround"></th>
+                        } 
+                        else
+                        {
+                            //rgb(34,139,34) Verde
+                            //rgb(139,69,19) Café 1
+                            //rgb(165,42,42) Café 2
+                            //rgb(0,0,0) Negro
+
+                            (int, int, int) rgb;
+                            var terrainInCoord = EvolutionEnvironment.Map.TerrainMap[coord.Item1,coord.Item2];
+                            if (terrainInCoord == Constants.EasyTerrain)
+                            {
+                                rgb = (153,255,153);
+                            }
+                            else if (terrainInCoord == Constants.MediumTerrain)
+                            {
+                                rgb = (51,255,51);
+                            }
+                            else if (terrainInCoord == Constants.DifficultTerrain)
+                            {
+                                rgb = (0,204,76);
+                            }
+                            else
+                            {
+                                rgb = (0,0,0);
+                                
+                            }
+                            <th class="typeGround"  style="background-color: rgb(@rgb.Item1,@rgb.Item2,@rgb.Item3)"></th>
+                        }
+                    }
+                </tr>
+            }
+        </table>
         
     </div>
     

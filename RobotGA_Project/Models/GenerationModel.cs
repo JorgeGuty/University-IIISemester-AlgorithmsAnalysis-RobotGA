@@ -11,8 +11,8 @@ namespace RobotGA_Project.Models
         public int Id { get; set; }
         
         [Required] 
-        [Display(Name = "Fitness Standard Deviation")]
-        public float FitnessStandardDeviation { get; set; }
+        [Display(Name = "Fitness Average")]
+        public float FitnessAverage { get; set; }
         
         [Required] public List<RobotModel> Population { get; set; }
         

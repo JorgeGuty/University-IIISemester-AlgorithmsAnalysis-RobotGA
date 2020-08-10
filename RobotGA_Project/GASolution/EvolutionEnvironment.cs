@@ -10,7 +10,7 @@ namespace RobotGA_Project.GASolution
     public static class EvolutionEnvironment
     {
         
-        public static Map Map = MapLoader.LoadMap(@"C:\Users\jguty\OneDrive\GitHub\University_RobotGA\RobotGA_Project\GASolution\Data Structures\MapStructures\MapFiles\map1.txt");
+        public static Map Map = MapLoader.LoadMap(@"C:\Users\jguty\OneDrive\GitHub\University_RobotGA\RobotGA_Project\GASolution\Data Structures\MapStructures\MapFiles\map4.txt");
 
         public static List<Generation> Generations = new List<Generation>();
 
@@ -19,7 +19,7 @@ namespace RobotGA_Project.GASolution
             var gen0 = new Generation();
             Generations.Add(gen0);
             var wonFlag = false;
-            var index = 1;
+            var index = 1;    
             while(!wonFlag)
             {
                 Console.WriteLine("Generation"+index);
@@ -32,9 +32,18 @@ namespace RobotGA_Project.GASolution
 
         private static bool isWinnerGeneration(Generation pGeneration)
         {
-            return pGeneration.Population.Any(robot => robot.Won);
+            var winnerCount = 0;
+
+            foreach (var robot in pGeneration.Population)
+            {
+                if (robot.Won)
+                {
+                    winnerCount++;
+                }
+            }
+            Console.WriteLine("COUNT:"+winnerCount);
+            return winnerCount >= 60;
         }
-
-
+        
     }
 }

@@ -4,10 +4,126 @@
     ViewBag.Title = "Generation";
     Layout = "~/Views/Shared/_Layout_WithGenerationOption.cshtml";
 }
-
+<head runat="server">
+    <title></title>
+    
+    <style type="text/css">
+        .normalGround
+        {
+        padding: 10px;
+        text-align: center;
+        border: 1px solid lightgray;
+        background-color: #9d9d9d;
+        }
+    </style>
+    <style type="text/css">
+        .typeGround
+        {
+        padding: 10px;
+        text-align: center;
+        border: 1px solid lightgray;
+        }
+    </style>
+    <style type="text/css">
+    
+        .wentThroughGround
+        {
+        padding: 10px;
+        text-align: center;
+        border: 1px solid lightgray;        
+        }
+    </style>
+    <style type="text/css">
+        .goalGround
+        {
+        padding: 10px;
+        text-align: center;
+        border: 1px solid lightgray;
+        background-color: #c0a16b;
+        }
+    </style>
+    <style type="text/css">
+        .startPointGround
+        {
+        padding: 10px;
+        text-align: center;
+        border: 1px solid lightgray;
+        background-color: #3c3c3c;
+        }
+    </style>    
+</head>
 <div class="jumbotron">
-    <h1>Gen-@Model.Id</h1>
-    <p> Fitness Standard Deviation: @Model.FitnessStandardDeviation </p>
+    <div class="col-md-6">
+        <h1>Gen-@Model.Id</h1>
+        <p> @Html.DisplayNameFor(model => model.FitnessAverage): @Model.FitnessAverage </p>
+    </div>
+
+    <div class="col-md-6">
+        <h2>Population Heatmap</h2>
+        <hr/>
+        <table class="style1">
+            @for (int row = 0; row < Constants.MapDimensions; row++)
+            {
+                <tr class="normalGround">
+                    @for (int column = 0; column < Constants.MapDimensions; column++)
+                    {
+                        var coord = (row,column);
+                        if (coord.Item1 == Constants.StartIndex.Item1 && coord.Item2 == Constants.StartIndex.Item2)
+                        {
+                            <th class="startPointGround"></th>
+                        } 
+                        else if (coord.Item1 == Constants.GoalIndex.Item1 && coord.Item2 == Constants.GoalIndex.Item2)
+                        {
+                            <th class="goalGround"></th>
+                        }
+                        else if (Model.Population.Any(robot => robot.Route.Contains(coord)))
+                        {
+                            var appearances = 0;
+                            foreach (var robotModel in Model.Population)
+                            {
+                                appearances += MathematicalOperations.CountAppearances(robotModel.Route, coord);
+                            }
+                            var r = Constants.GENERATIONAL_HEAT_INITIAL_COLOR.Item1 - Constants.GENERATIONAL_R_DECREMENT_RATIO * (appearances-1);
+                            if (r < 0){r = 0;}
+                            var g = Constants.GENERATIONAL_HEAT_INITIAL_COLOR.Item2 - Constants.GENERATIONAL_G_DECREMENT_RATIO * (appearances-1);
+                            if (g < 0){g = 0;}
+                            var b = Constants.GENERATIONAL_HEAT_INITIAL_COLOR.Item3 - Constants.GENERATIONAL_B_DECREMENT_RATIO * (appearances-1);    
+                            if (b < 0){b = 0;}
+                            <th class="wentThroughGround" style="background-color: rgb(@r,@g,@b)"></th>
+                        }
+                        else
+                        {
+                            //rgb(34,139,34) Verde
+                            //rgb(139,69,19) Café 1
+                            //rgb(165,42,42) Café 2
+                            //rgb(0,0,0) Negro
+
+                            (int, int, int) rgb;
+                            var terrainInCoord = EvolutionEnvironment.Map.TerrainMap[coord.Item1,coord.Item2];
+                            if (terrainInCoord == Constants.EasyTerrain)
+                            {
+                                rgb = (153,255,153);
+                            }
+                            else if (terrainInCoord == Constants.MediumTerrain)
+                            {
+                                rgb = (51,255,51);
+                            }
+                            else if (terrainInCoord == Constants.DifficultTerrain)
+                            {
+                                rgb = (0,204,76);
+                            }
+                            else
+                            {
+                                rgb = (0,0,0);
+                                
+                            }
+                            <th class="typeGround"  style="background-color: rgb(@rgb.Item1,@rgb.Item2,@rgb.Item3)"></th>
+                        }
+                    }
+                </tr>
+            }
+        </table>
+    </div>
     <div class="row">
         @if (Model.Id != 0)
         {
@@ -15,7 +131,7 @@
                 "<< Previous",
                 "Index",
                 "Generation",
-                new {pRobotId = Model.Id - 1},
+                new {pGenerationId = Model.Id - 1},
                 new {@class = "btn btn-primary"})
         }
         @if (Model.Id != EvolutionEnvironment.Generations.Count-1)
@@ -24,16 +140,17 @@
                 "Next >>",
                 "Index",
                 "Generation",
-                new {pRobotId = Model.Id + 1},
+                new {pGenerationId = Model.Id + 1},
                 new {@class = "btn btn-primary"})
         }
         @Html.ActionLink(
-        "Back",
-        "Index",
-        "Generations",
-        null,
-        new {@class = "btn btn-danger"})
+            "Back",
+            "Index",
+            "Generations",
+            null,
+            new {@class = "btn btn-danger"})
     </div>
+    
 </div>
 <h3>Population</h3>
 <hr />

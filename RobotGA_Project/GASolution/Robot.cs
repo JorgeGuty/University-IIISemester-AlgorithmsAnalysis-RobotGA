@@ -163,7 +163,7 @@ namespace RobotGA_Project.GASolution
             int wonFit = Constants.WinBonus;
             
             Fitness = distanceFit + nonRepeatedStepsFit + stepsFit + energyFit + costFit;
-            if (Won) Fitness += wonFit;
+            if (Won) Fitness *= wonFit;
             
         }
 
@@ -187,8 +187,6 @@ namespace RobotGA_Project.GASolution
                 totalEnergyConsume += energyConsumed;
                 if (Position.Item1 == Constants.GoalIndex.Item1 && Position.Item2 == Constants.GoalIndex.Item2)
                 {
-                    Console.WriteLine("Won "+Id);
-
                     Won = true;
                 }
             }
@@ -298,12 +296,17 @@ namespace RobotGA_Project.GASolution
            Node<(int, int)> belowNode;
            Node<(int, int)> rightNode;
            Node<(int, int)> leftNode;
-           
+
+           bool blockedAbove = false;
+           bool blockedBelow = false;
+           bool blockedRight = false;
+           bool blockedLeft = false;
+
            var robotRange = Hardware.Camera.Range;
            for (var range = 1; range <= robotRange; range++)
            {
                aboveIndex = (Position.Item1, Position.Item2 - range);
-               if (aboveIndex.Item2 >= 0)
+               if (aboveIndex.Item2 >= 0 && !blockedAbove)
                {
                    if (EvolutionEnvironment.Map.TerrainMap[aboveIndex.Item1,aboveIndex.Item2] != Constants.BlockedTerrain)
                    {
@@ -311,11 +314,15 @@ namespace RobotGA_Project.GASolution
                        VisionRange.AddNode(aboveNode);
                        VisionRange.AddArc(0, positionNode, aboveNode);
                    }
+                   else
+                   {
+                       blockedAbove = true;
+                   }
 
                }
                
                belowIndex = (Position.Item1, Position.Item2 + range);
-               if (belowIndex.Item2 < Constants.MapDimensions)
+               if (belowIndex.Item2 < Constants.MapDimensions && !blockedBelow)
                {
                    if (EvolutionEnvironment.Map.TerrainMap[belowIndex.Item1,belowIndex.Item2] != Constants.BlockedTerrain)
                    {
@@ -323,10 +330,14 @@ namespace RobotGA_Project.GASolution
                        VisionRange.AddNode(belowNode);
                        VisionRange.AddArc(0, positionNode, belowNode);
                    }
+                   else
+                   {
+                       blockedBelow = true;
+                   }
                }
                
                rightIndex = (Position.Item1 + range, Position.Item2);
-               if (rightIndex.Item1 < Constants.MapDimensions)
+               if (rightIndex.Item1 < Constants.MapDimensions && !blockedRight)
                {
                    if (EvolutionEnvironment.Map.TerrainMap[rightIndex.Item1,rightIndex.Item2] != Constants.BlockedTerrain)
                    {
@@ -334,16 +345,24 @@ namespace RobotGA_Project.GASolution
                        VisionRange.AddNode(rightNode);
                        VisionRange.AddArc(0, positionNode, rightNode);
                    }
+                   else
+                   {
+                       blockedRight = true;
+                   }
                }
                
                leftIndex = (Position.Item1 - range, Position.Item2);
-               if (leftIndex.Item1 >= 0)
+               if (leftIndex.Item1 >= 0 && !blockedLeft)
                {
                    if (EvolutionEnvironment.Map.TerrainMap[leftIndex.Item1,leftIndex.Item2] != Constants.BlockedTerrain)
                    {
                        leftNode =  new Node<(int,int)>(leftIndex);
                        VisionRange.AddNode(leftNode);
                        VisionRange.AddArc(0, positionNode, leftNode);
+                   }
+                   else
+                   {
+                       blockedLeft = true;
                    }
                }
            }
@@ -374,8 +393,7 @@ namespace RobotGA_Project.GASolution
             return stringObject;
 
         }
-
-
+        
         private int ExecuteTraceOfPositions(int variableIndex, int constantIndex, string direction, Map map, List<int> energiesSpent) {
             var returnSum = 0;
             var energy = 0;
