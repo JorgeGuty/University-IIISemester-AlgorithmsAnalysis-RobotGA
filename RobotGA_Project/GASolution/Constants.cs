@@ -20,7 +20,7 @@ namespace RobotGA_Project.GASolution
         
         public static readonly int PopulationSize = 20;
         
-        public static readonly int MutationProbability = 4;
+        public static readonly int MutationProbability = 10;
         
         public static readonly int BasicEnergyConsumption = 1;
         public static readonly int BasicCost = 1;

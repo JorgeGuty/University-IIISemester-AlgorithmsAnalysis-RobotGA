@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Microsoft.Ajax.Utilities;
 using RobotGA_Project.GASolution.Data_Structures.MapStructures;
@@ -21,6 +22,7 @@ namespace RobotGA_Project.GASolution
             var index = 1;
             while(!wonFlag)
             {
+                Console.WriteLine("Generation"+index);
                 Generation newGen = new Generation(Generations[index-1].Population);
                 Generations.Add(newGen);
                 wonFlag = isWinnerGeneration(newGen);

@@ -1,4 +1,5 @@
-﻿@model RobotGA_Project.Models.GenerationModel
+﻿@using RobotGA_Project.GASolution
+@model RobotGA_Project.Models.GenerationModel
 @{
     ViewBag.Title = "Generation";
     Layout = "~/Views/Shared/_Layout_WithGenerationOption.cshtml";
@@ -7,8 +8,31 @@
 <div class="jumbotron">
     <h1>Gen-@Model.Id</h1>
     <p> Fitness Standard Deviation: @Model.FitnessStandardDeviation </p>
-    <div>
-        <a href="javascript:history.go(-1)">Back</a>
+    <div class="row">
+        @if (Model.Id != 0)
+        {
+            @Html.ActionLink(
+                "<< Previous",
+                "Index",
+                "Generation",
+                new {pRobotId = Model.Id - 1},
+                new {@class = "btn btn-primary"})
+        }
+        @if (Model.Id != EvolutionEnvironment.Generations.Count-1)
+        {
+            @Html.ActionLink(
+                "Next >>",
+                "Index",
+                "Generation",
+                new {pRobotId = Model.Id + 1},
+                new {@class = "btn btn-primary"})
+        }
+        @Html.ActionLink(
+        "Back",
+        "Index",
+        "Generations",
+        null,
+        new {@class = "btn btn-danger"})
     </div>
 </div>
 <h3>Population</h3>
