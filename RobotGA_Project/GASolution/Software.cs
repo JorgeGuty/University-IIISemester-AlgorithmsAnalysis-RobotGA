@@ -30,25 +30,22 @@
         {
             var moveTowardsEndChromosome = 
                 CompleteChromosome.Substring(0, Constants.ChromosomeSize);
-            var moveAwayFromEndChromosome =
-                CompleteChromosome.Substring(Constants.ChromosomeSize, Constants.ChromosomeSize);
+            
             var moveToPassableTerrainChromosome =
-                CompleteChromosome.Substring(2 * Constants.ChromosomeSize, Constants.ChromosomeSize);
-            var moveToNonPassableTerrainChromosome = 
-                CompleteChromosome.Substring(3 * Constants.ChromosomeSize, Constants.ChromosomeSize);
+                CompleteChromosome.Substring(1 * Constants.ChromosomeSize, Constants.ChromosomeSize);
+
             var spendTheLessEnergyChromosome =
-                CompleteChromosome.Substring(4 * Constants.ChromosomeSize, Constants.ChromosomeSize);
-            var spendTheMostEnergyChromosome =
-                CompleteChromosome.Substring(5 * Constants.ChromosomeSize, Constants.ChromosomeSize);
+                CompleteChromosome.Substring(2 * Constants.ChromosomeSize, Constants.ChromosomeSize);
+            
             var spendNormalEnergyChromosome = 
-                CompleteChromosome.Substring(6 * Constants.ChromosomeSize, Constants.ChromosomeSize);
+                CompleteChromosome.Substring(3 * Constants.ChromosomeSize, Constants.ChromosomeSize);
 
             MoveTowardsEnd = MathematicalOperations.ConvertBinaryStringToInt(moveTowardsEndChromosome);
-            MoveAwayFromEnd = MathematicalOperations.ConvertBinaryStringToInt(moveAwayFromEndChromosome);
+            MoveAwayFromEnd = (Constants.GenotypeMaxValue-1) - MoveTowardsEnd;
             MoveToPassableTerrain = MathematicalOperations.ConvertBinaryStringToInt(moveToPassableTerrainChromosome);
-            MoveToNonPassableTerrain = MathematicalOperations.ConvertBinaryStringToInt(moveToNonPassableTerrainChromosome);
+            MoveToNonPassableTerrain = (Constants.GenotypeMaxValue-1) - MoveToPassableTerrain;
             SpendTheLessEnergy = MathematicalOperations.ConvertBinaryStringToInt(spendTheLessEnergyChromosome);
-            SpendTheMostEnergy = MathematicalOperations.ConvertBinaryStringToInt(spendTheMostEnergyChromosome);
+            SpendTheMostEnergy = (Constants.GenotypeMaxValue-1) - SpendTheLessEnergy;
             SpendNormalEnergy = MathematicalOperations.ConvertBinaryStringToInt(spendNormalEnergyChromosome);
         }
 
@@ -71,33 +68,18 @@
             var maxValue = Constants.GenotypeMaxValue;
             
             MoveTowardsEnd = MathematicalOperations.RandomIntegerInRange(minValue, maxValue);
-            MoveAwayFromEnd = MathematicalOperations.RandomIntegerInRange(minValue, maxValue);
-            
             var moveTowardsEndChromosome = MathematicalOperations.ConvertIntToBinaryString(MoveTowardsEnd);
-            var moveAwayFromEndChromosome = MathematicalOperations.ConvertIntToBinaryString(MoveAwayFromEnd);
-
-            var movingModuleChromosome = moveTowardsEndChromosome + moveAwayFromEndChromosome;
-            
+            MoveAwayFromEnd = (Constants.GenotypeMaxValue-1) - MoveTowardsEnd;
             MoveToPassableTerrain = MathematicalOperations.RandomIntegerInRange(minValue, maxValue);
-            MoveToNonPassableTerrain = MathematicalOperations.RandomIntegerInRange(minValue, maxValue);
-            
             var moveToPassableTerrainChromosome = MathematicalOperations.ConvertIntToBinaryString(MoveToPassableTerrain);
-            var moveToNonPassableTerrainChromosome = MathematicalOperations.ConvertIntToBinaryString(MoveToNonPassableTerrain);
-
-            var terrainModuleChromosome = moveToPassableTerrainChromosome + moveToNonPassableTerrainChromosome;
-            
+            MoveToNonPassableTerrain = (Constants.GenotypeMaxValue-1) - MoveToPassableTerrain;
             SpendTheLessEnergy = MathematicalOperations.RandomIntegerInRange(minValue, maxValue);
-            SpendTheMostEnergy = MathematicalOperations.RandomIntegerInRange(minValue, maxValue);
-            SpendNormalEnergy = MathematicalOperations.RandomIntegerInRange(minValue, maxValue);
-
             var spendTheLessEnergyChromosome = MathematicalOperations.ConvertIntToBinaryString(SpendTheLessEnergy);
-            var spendTheMostEnergyChromosome = MathematicalOperations.ConvertIntToBinaryString(SpendTheMostEnergy);
+            SpendTheMostEnergy = (Constants.GenotypeMaxValue-1) - SpendTheLessEnergy;
+            SpendNormalEnergy = MathematicalOperations.RandomIntegerInRange(minValue, maxValue);
             var spendNormalEnergyChromosome = MathematicalOperations.ConvertIntToBinaryString(SpendNormalEnergy);
-
-            var energyModuleChromosome =
-                spendTheLessEnergyChromosome + spendTheMostEnergyChromosome + spendNormalEnergyChromosome;
-
-            CompleteChromosome = movingModuleChromosome + terrainModuleChromosome + energyModuleChromosome;
+            
+            CompleteChromosome = moveTowardsEndChromosome + moveToPassableTerrainChromosome + spendTheLessEnergyChromosome + spendNormalEnergyChromosome;
 
         }
         

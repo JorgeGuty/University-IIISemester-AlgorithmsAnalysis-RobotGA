@@ -78,7 +78,7 @@ namespace RobotGA_Project.Models.ModelControllers
                 Cost = pRobot.TotalCost,
                 Hardware = GenerateHardwareModel(pRobot.Hardware),
                 Software = GenerateSoftwareModel(pRobot.Software),
-                Route = pRobot.Route
+                Route = pRobot.BestTry
             };
             /*
             model.Route.Add((10,10));

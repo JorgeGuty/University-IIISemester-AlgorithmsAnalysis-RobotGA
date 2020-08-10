@@ -57,6 +57,7 @@
           </e>
         </e>
         <e p="Engine.cs" t="Include" />
+        <e p="EvolutionEnvironment.cs" t="Include" />
         <e p="Generation.cs" t="Include" />
         <e p="GeneticOperations.cs" t="Include" />
         <e p="Hardware.cs" t="Include" />

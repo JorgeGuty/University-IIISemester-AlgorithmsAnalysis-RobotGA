@@ -1,5 +1,9 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
+using System.Runtime.CompilerServices;
+using System.Runtime.InteropServices;
 using RobotGA_Project.GASolution.Data_Structures.Graph;
 using RobotGA_Project.GASolution.Data_Structures.MapStructures;
 
@@ -23,7 +27,13 @@ namespace RobotGA_Project.GASolution
         
         public Software Software { get; set; }
         
-        public List<(int, int)> Route { get; set; }
+        public List<(int, int)> BestTry { get; set; }
+        
+        private int BestDistance { get; set; }
+        
+        private List<(int,int)> LastTry { get; set; }
+        
+        public int EnergyLeft { get; set; }
 
         public NonDirectedGraph<(int, int)> VisionRange; // Vision Range of the robot, depends on the camera type. Represented by a graph.
         
@@ -72,49 +82,186 @@ namespace RobotGA_Project.GASolution
             Id = pId;
             Fitness = 0;
             ReproductionProbability = 0f;
-            Route = new List<(int, int)>();
-            Position = Constants.StartIndex;
+            BestTry = new List<(int, int)>();
+            LastTry = new List<(int, int)>();
             TotalCost = Hardware.Cost;
-            SetVisionRange();
-        }
-        
-        private void Move((int, int) pNewPosition)
-        {
-            Position = pNewPosition;
+            BestDistance = Constants.MaxFinalDistancePossible;
+            Position = Constants.StartIndex;
             SetVisionRange();
         }
         
         public void CalculateFitness()
         {
-            
             /*
              * Function set to calculate the fitness of an individual
              */
-
-            int randomDistanceToGoal =
-                MathematicalOperations.RandomIntegerInRange(0, Constants.MaxFinalDistancePossible);
-            //Console.WriteLine(randomDistanceToGoal);
-            int distanceScore = 
-                GeneticOperations.NormalizeFitnessScore(randomDistanceToGoal, Constants.MaxFinalDistancePossible);
-            //Console.WriteLine(distanceScore);
-            int randomStepsForward = 
-                MathematicalOperations.RandomIntegerInRange(0, Constants.MaxEnergyPossible);
-            //Console.WriteLine(randomStepsForward);
-            int stepsScore = GeneticOperations.NormalizeFitnessScore(randomStepsForward, Constants.MaxEnergyPossible);
-            //Console.WriteLine(stepsScore);
-            int randomEnergyPerStep =
-                MathematicalOperations.RandomIntegerInRange(0, Constants.MaxEnergyPerStepPossible);
-            //Console.WriteLine(randomEnergyPerStep);
-            int energyScore =
-                GeneticOperations.NormalizeFitnessScore(randomEnergyPerStep, Constants.MaxEnergyPerStepPossible);
-            //Console.WriteLine(energyScore);
-            int costScore = GeneticOperations.NormalizeFitnessScore(TotalCost, Constants.MaxCostPossible);
-            //Console.WriteLine(costScore);
-
-            Fitness = distanceScore + stepsScore + energyScore + costScore;
             
+            var distancesToEnd = new List<int>();
+            var energiesPerStep = new List<int>();
+            var stepsForward = new List<int>();
+            var repeatedStepsQuantities = new List<int>();
+            
+            for (int times = 0; times < Constants.TRIES_TOTAL; times++)
+            {
+                EnergyLeft = Hardware.Battery.Energy;
+                Position = Constants.StartIndex;
+                LastTry.Clear();
+                SetVisionRange();
+                var life = Live();
+                stepsForward.Add(life.Item1);
+                distancesToEnd.Add(life.Item2);
+                energiesPerStep.Add(life.Item3);
+                
+                if (life.Item2 <= BestDistance)
+                {
+                    BestDistance = life.Item2;
+                    BestTry.Clear();
+                    BestTry = LastTry;
+                }
+            }
+            
+            int averageDistanceToGoal =
+                (int)MathematicalOperations.Average(distancesToEnd, distancesToEnd.Count);
+
+            int averageStepsForward = 
+                (int)MathematicalOperations.Average(stepsForward, stepsForward.Count);
+
+            int averageEnergyPerStep =
+                (int)MathematicalOperations.Average(energiesPerStep, energiesPerStep.Count);
+
+            int averageRepeatedSteps;
+
+            int distanceScore = Constants.MaxFinalDistancePossible - averageDistanceToGoal;
+            int stepsScore = Constants.MaxEnergyPossible - averageStepsForward;
+            int energyPerStepScore = Constants.MaxEnergyPerStepPossible - averageEnergyPerStep;
+            int costScore = Constants.MaxCostPossible - TotalCost;
+            
+            int distanceFit = 
+                Constants.FIRST_PRIORITY_VALUE * GeneticOperations.NormalizeFitnessScore(distanceScore, Constants.MaxFinalDistancePossible);
+            int stepsFit = 
+                Constants.SECOND_PRIORITY_VALUE * GeneticOperations.NormalizeFitnessScore(stepsScore, Constants.MaxEnergyPossible);
+            int energyFit = 
+                Constants.THIRD_PRIORITY_VALUE * GeneticOperations.NormalizeFitnessScore(energyPerStepScore, Constants.MaxEnergyPerStepPossible);
+            int costFit = 
+                Constants.LAST_PRIORITY_VALUE * GeneticOperations.NormalizeFitnessScore(costScore, Constants.MaxCostPossible);
+            
+            Fitness = distanceFit + stepsFit + energyFit + costFit;
+        }
+
+        public (int, int, int) Live()
+        {
+            
+            /*
+             *  Returns: (totalStepsForward, distanceToGoal, energyPerStep)
+             */
+            
+            var totalStepsForward = 0;
+            var totalSteps = 0;
+            var totalEnergyConsume = 0;
+
+            var won = false;
+            
+            while (EnergyLeft > 0 && !won)
+            {
+                var (stepsForward, steps, energyConsumed) = MovementDecision();
+                totalStepsForward += stepsForward;
+                totalSteps += steps;
+                totalEnergyConsume += energyConsumed;
+
+                if (Position.Item1 == Constants.GoalIndex.Item1 && Position.Item2 == Constants.GoalIndex.Item2)
+                {
+                    Console.WriteLine(Id);
+                    won = true;
+                }
+            }
+
+            var distanceToGoal = (int)MathematicalOperations.DistanceBetweenPoints(Position, Constants.GoalIndex);
+
+            if (totalSteps == 0) totalSteps = 1;
+            var energyPerStep = totalEnergyConsume / totalSteps;
+            
+            return (totalStepsForward, distanceToGoal, energyPerStep);
+
         }
         
+        public (int, int, int) MovementDecision()
+        {
+            /*
+             * Returns: (stepsForward, totalSteps, energyConsumed)
+             */
+            var randomDecision = MathematicalOperations.Random0To1Float();
+            var accumulatedPercentage = 0f;
+            var selectedPosition = Position;
+            
+            foreach (Arc<(int, int)> arc in VisionRange.Arcs)
+            {
+                accumulatedPercentage += arc.Weight;
+                if (randomDecision <= accumulatedPercentage)
+                {
+                    selectedPosition = arc.PointB.Object;
+                    break;
+                }
+            }
+
+            var movement = Move(selectedPosition);
+            SetVisionRange();
+            return movement;
+            
+        }
+
+        public (int, int, int) Move((int, int) pPosition)
+        {
+            var stepsForward = 0;
+            var energyConsumed = 0;
+            var totalSteps = 0;
+            
+            if (EnergyLeft > 0)
+            {
+                var (row, column) = Position;
+                
+                if(pPosition.Item1 != row && pPosition.Item2 != column) Console.Write(pPosition);
+                
+                while (row != pPosition.Item1 || column != pPosition.Item2)
+                {
+                    if (row < pPosition.Item1) row++;
+                    if (row > pPosition.Item1) row--;
+                    if (column < pPosition.Item2) column++;
+                    if (column > pPosition.Item2) column--;
+                    
+                
+                    var terrainInPosition = EvolutionEnvironment.Map.TerrainMap[row,column];
+                    
+                    if (terrainInPosition.DifficultyLevel > Hardware.Engine.MaxTerrainDifficulty)
+                    {
+                        EnergyLeft = 0;
+                        break;
+                    }
+                    
+                    var currentDistanceToGoal =
+                        (int)MathematicalOperations.DistanceBetweenPoints(Position, Constants.GoalIndex);
+                    var futureDistanceToGoal =
+                        (int) MathematicalOperations.DistanceBetweenPoints((row, column), Constants.GoalIndex);
+
+                    if (currentDistanceToGoal < futureDistanceToGoal) stepsForward++;
+                    
+                    var energyConsume = Hardware.Camera.EnergyConsumption + terrainInPosition.EnergyConsumption;
+                    
+
+                    EnergyLeft -= energyConsume;
+                    
+                    totalSteps++;
+                    energyConsumed += energyConsume;
+                    
+                    Position = (row,column);
+                    LastTry.Add(Position);
+                    
+                }
+            }
+            
+            return (stepsForward, totalSteps, energyConsumed);
+
+        }
+
         private void SetVisionRange()
         { 
             VisionRange = new NonDirectedGraph<(int, int)>();
@@ -138,35 +285,49 @@ namespace RobotGA_Project.GASolution
                aboveIndex = (Position.Item1, Position.Item2 - range);
                if (aboveIndex.Item2 >= 0)
                {
-                   aboveNode =  new Node<(int,int)>(aboveIndex);
-                   VisionRange.AddNode(aboveNode)    ;
-                   VisionRange.AddArc(0, positionNode, aboveNode);
+                   if (EvolutionEnvironment.Map.TerrainMap[aboveIndex.Item1,aboveIndex.Item2] != Constants.BlockedTerrain)
+                   {
+                       aboveNode =  new Node<(int,int)>(aboveIndex);
+                       VisionRange.AddNode(aboveNode);
+                       VisionRange.AddArc(0, positionNode, aboveNode);
+                   }
+
                }
                
                belowIndex = (Position.Item1, Position.Item2 + range);
                if (belowIndex.Item2 < Constants.MapDimensions)
                {
-                   belowNode =  new Node<(int,int)>(belowIndex);
-                   VisionRange.AddNode(belowNode);
-                   VisionRange.AddArc(0, positionNode, belowNode);
+                   if (EvolutionEnvironment.Map.TerrainMap[belowIndex.Item1,belowIndex.Item2] != Constants.BlockedTerrain)
+                   {
+                       belowNode =  new Node<(int,int)>(belowIndex);
+                       VisionRange.AddNode(belowNode);
+                       VisionRange.AddArc(0, positionNode, belowNode);
+                   }
                }
                
                rightIndex = (Position.Item1 + range, Position.Item2);
                if (rightIndex.Item1 < Constants.MapDimensions)
                {
-                   rightNode =  new Node<(int,int)>(rightIndex);
-                   VisionRange.AddNode(rightNode);
-                   VisionRange.AddArc(0, positionNode, rightNode);
+                   if (EvolutionEnvironment.Map.TerrainMap[rightIndex.Item1,rightIndex.Item2] != Constants.BlockedTerrain)
+                   {
+                       rightNode =  new Node<(int,int)>(rightIndex);
+                       VisionRange.AddNode(rightNode);
+                       VisionRange.AddArc(0, positionNode, rightNode);
+                   }
                }
                
                leftIndex = (Position.Item1 - range, Position.Item2);
                if (leftIndex.Item1 >= 0)
                {
-                   leftNode =  new Node<(int,int)>(leftIndex);
-                   VisionRange.AddNode(leftNode);
-                   VisionRange.AddArc(0, positionNode, leftNode);
+                   if (EvolutionEnvironment.Map.TerrainMap[leftIndex.Item1,leftIndex.Item2] != Constants.BlockedTerrain)
+                   {
+                       leftNode =  new Node<(int,int)>(leftIndex);
+                       VisionRange.AddNode(leftNode);
+                       VisionRange.AddArc(0, positionNode, leftNode);
+                   }
                }
            }
+           CalculateArchesWeights();
         }
         public override string ToString()
         {
@@ -312,8 +473,9 @@ namespace RobotGA_Project.GASolution
             return 0;
         }
 
-        public void CalculateArchesWeights(Map map) {
-            
+        public void CalculateArchesWeights()
+        {
+            var map = EvolutionEnvironment.Map;
             var energiesSpent = new List<int>();
             var sums = new List<int>();
             Node<(int, int)> centralNode = null;
@@ -410,7 +572,6 @@ namespace RobotGA_Project.GASolution
                     lowestIndex = i;
                 }
             }
-
             
             for (var i = 0; i < sums.Count; i++) {
                 if (i==highestIndex) {

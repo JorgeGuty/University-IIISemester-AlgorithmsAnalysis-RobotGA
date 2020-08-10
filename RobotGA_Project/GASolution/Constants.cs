@@ -24,7 +24,8 @@ namespace RobotGA_Project.GASolution
         
         public static readonly int BasicEnergyConsumption = 1;
         public static readonly int BasicCost = 1;
-        
+
+        public static readonly int TRIES_TOTAL = 50;
         
         public static readonly int GEN_ZERO_PARENT_ID = -1;
         public static readonly (int, int, int) HEAT_INITIAL_COLOR = (201, 60, 32);
@@ -60,7 +61,7 @@ namespace RobotGA_Project.GASolution
         
         // Software Constants
 
-        public static int BehaviorTraitQuantity = 7;
+        public static int BehaviorTraitQuantity = 4;
         public static int SoftwareChromosomeSize = ChromosomeSize * BehaviorTraitQuantity;
         
         // Engine Constants
@@ -126,11 +127,20 @@ namespace RobotGA_Project.GASolution
         
         // Fitness Constants
 
+        public static readonly int FIRST_PRIORITY_VALUE = 20;
+        public static readonly int SECOND_PRIORITY_VALUE = 10;
+        public static readonly int THIRD_PRIORITY_VALUE = 1;
+        public static readonly int FOURTH_PRIORITY_VALUE = 1;
+        public static readonly int LAST_PRIORITY_VALUE = 1;
+
         public static readonly int FitnessCriteriaQuantity = 4;
 
-        public static readonly int MaxFinalDistancePossible = MapDimensions * (int) Math.Sqrt(2);
-        
+        public static readonly int MaxFinalDistancePossible =
+            (int)MathematicalOperations.DistanceBetweenPoints(StartIndex, GoalIndex);
+
         public static readonly int MaxEnergyPossible = (BatteryTypeQuantity - 1 ) * EnergyIncrement + BasicEnergy;
+
+        public static readonly int MaxRepeatedStepsPossible = MaxEnergyPossible / 2;
         
         public static readonly int MaxEnergyPerStepPossible = 
             (PassableTerrainTypeQuantity - 1) * TerrainEnergyConsumptionIncrement + BasicEnergyConsumption + 
