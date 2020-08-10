@@ -14,7 +14,7 @@ namespace RobotGA_Project.GASolution
 
         public int Id { get; set; }
         
-        private bool Won { get; set; }
+        public bool Won { get; set; }
         
         public float ReproductionProbability { get; set; }
         
@@ -112,16 +112,23 @@ namespace RobotGA_Project.GASolution
                 LastTry.Clear();
                 SetVisionRange();
                 var life = Live();
+
                 stepsForward.Add(life.Item1);
                 nonRepeatedStepsQuantities.Add(life.Item2);
                 distancesToEnd.Add(life.Item3);
                 energiesPerStep.Add(life.Item4);
                 
-                if (life.Item2 <= BestDistance)
+                if (life.Item3 <= BestDistance)
                 {
-                    BestDistance = life.Item2;
                     BestTry.Clear();
-                    BestTry = LastTry;
+                    if (Won)
+                    {
+                        foreach ((int, int) tuple in LastTry)
+                        {
+                            BestTry.Add(tuple);
+                        } 
+                    }
+                    BestDistance = life.Item3;
                 }
             }
             
@@ -183,6 +190,7 @@ namespace RobotGA_Project.GASolution
                 if (Position.Item1 == Constants.GoalIndex.Item1 && Position.Item2 == Constants.GoalIndex.Item2)
                 {
                     Console.WriteLine("Won "+Id);
+
                     Won = true;
                 }
             }

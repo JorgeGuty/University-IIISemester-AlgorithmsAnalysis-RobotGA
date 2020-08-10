@@ -48,19 +48,15 @@ namespace RobotGA_Project.Controllers
             //var testBot = new Robot();
 
             GenerationModelController.GenerationModels.Clear();
-
+            EvolutionEnvironment.Generations.Clear();
+            
             return View();
         }
 
         public ActionResult RunGA()
         {
-            var gen0 = new Generation();
-            var generations = new List<Generation> {gen0};
-            for (int i = 1; i <= 500; i++)
-            {
-                generations.Add(new Generation(generations[i-1].Population));
-            }
-            
+            EvolutionEnvironment.SimulateEvolution();
+            var generations = EvolutionEnvironment.Generations;
             GenerationModelController.SetListOfGenerationModels(generations);
             return RedirectToAction("Index", "Generations");
         }
