@@ -12,25 +12,25 @@ namespace RobotGA_Project.Models.ModelControllers
         {
             for (int index = 0; index < pGenerations.Count; index++)
             {
-                var generationModel = GenerateGenerationModel(pGenerations[index], index);
+                var generationModel = GenerateGenerationModel(pGenerations[index]);
                 GenerationModels.Add(generationModel);
             }
         }
         
-        private static GenerationModel GenerateGenerationModel(Generation pGeneration, int pGenerationId)
+        private static GenerationModel GenerateGenerationModel(Generation pGeneration)
         {
             GenerationModel model = new GenerationModel()
             {
-                Id = pGenerationId,
-                Population = GenerateGenerationOfModels(pGeneration,pGenerationId),
+                Id = pGeneration.Id,
+                Population = GenerateGenerationOfModels(pGeneration),
                 FitnessAverage = pGeneration.FitnessAverage,
-                WorstFitness = pGeneration.WorstFitness,
-                BestFitness = pGeneration.BestFitness
+                WorstFitness = pGeneration.WorstRun.Fitness,
+                BestFitness = pGeneration.BestRun.Fitness
             };
             return model;
         }
         
-        private static List<RobotModel> GenerateGenerationOfModels(Generation pGeneration, int pGenerationId)
+        private static List<RobotModel> GenerateGenerationOfModels(Generation pGeneration)
         {
             List<RobotModel> generationOfModels = new List<RobotModel>();
             for (int index = 0; index < pGeneration.Population.Count; index++)
@@ -39,13 +39,13 @@ namespace RobotGA_Project.Models.ModelControllers
                 {
                     var parentAId = pGeneration.Population[index].ParentA.Id;
                     var parentBId = pGeneration.Population[index].ParentB.Id;
-                    var newModel = GenerateRobotModel(pGeneration.Population[index], pGenerationId, parentAId,
+                    var newModel = GenerateRobotModel(pGeneration.Population[index], pGeneration.Population[index].GenerationId, parentAId,
                         parentBId);
                     generationOfModels.Add(newModel);
                 }
                 catch (NullReferenceException nullRef)
                 {
-                    var newModel = GenerateRobotModel(pGeneration.Population[index], pGenerationId, Constants.GEN_ZERO_PARENT_ID,
+                    var newModel = GenerateRobotModel(pGeneration.Population[index], pGeneration.Population[index].GenerationId, Constants.GEN_ZERO_PARENT_ID,
                         Constants.GEN_ZERO_PARENT_ID);
                     generationOfModels.Add(newModel);
                 }

@@ -14,6 +14,8 @@ namespace RobotGA_Project.GASolution
 
         public int Id { get; set; }
         
+        public int GenerationId { get; set; }
+        
         public bool Won { get; set; }
         
         public float ReproductionProbability { get; set; }
@@ -41,7 +43,7 @@ namespace RobotGA_Project.GASolution
         
         public (int,int) Position { get; set; } // (Rows,Columns)
 
-        public Robot(Robot pParentA, Robot pParentB, int pHardwarePartitionIndex, int pSoftwarePartitionIndex, int pId)
+        public Robot(Robot pParentA, Robot pParentB, int pHardwarePartitionIndex, int pSoftwarePartitionIndex, int pId, int pGenerationId)
         {
             
             /*
@@ -59,11 +61,11 @@ namespace RobotGA_Project.GASolution
                 new Software(pParentA.Software.CompleteChromosome, pParentB.Software.CompleteChromosome,
                     pSoftwarePartitionIndex);
 
-            InitializeFields(pId);
+            InitializeFields(pId,pGenerationId);
             
         }
 
-        public Robot(int pId)
+        public Robot(int pId, int pGenerationId)
         {
             /*
              * Method that initializes a Robot with random values. 
@@ -75,13 +77,14 @@ namespace RobotGA_Project.GASolution
             Hardware = new Hardware();
             Software = new Software();
             
-            InitializeFields(pId);
+            InitializeFields(pId,pGenerationId);
             
         }
 
-        private void InitializeFields(int pId)
+        private void InitializeFields(int pId, int pGenerationId)
         {
             Id = pId;
+            GenerationId = pGenerationId;
             Fitness = 0;
             ReproductionProbability = 0f;
             BestTry = new List<(int, int)>();
@@ -163,7 +166,7 @@ namespace RobotGA_Project.GASolution
             int wonFit = Constants.WinBonus;
             
             Fitness = distanceFit + nonRepeatedStepsFit + stepsFit + energyFit + costFit;
-            if (Won) Fitness += wonFit;
+            if (Won) Fitness *= wonFit;
             
         }
 

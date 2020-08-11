@@ -15,16 +15,24 @@ namespace RobotGA_Project.GASolution
 
         public static List<Generation> Generations = new List<Generation>();
 
+        public static Generation BestGeneration;
+        public static Robot BestRun;
+        
         public static void SimulateEvolution()
         {
-            var gen0 = new Generation();
+            var gen0 = new Generation(0);
+            BestGeneration = gen0;
+            BestRun = gen0.BestRun;
             Generations.Add(gen0);
             var wonFlag = false;
             var index = 1;    
             while(!wonFlag)
             {
-                Console.WriteLine("Generation"+index);
-                Generation newGen = new Generation(Generations[index-1].Population);
+                Console.WriteLine("Generation: "+index);
+                Generation newGen = new Generation(Generations[index-1].Population, index);
+                if (newGen.FitnessAverage > BestGeneration.FitnessAverage) BestGeneration = newGen;
+                if (newGen.BestRun.Fitness > BestRun.Fitness) BestRun = newGen.BestRun;
+                
                 Generations.Add(newGen);
                 wonFlag = isWinnerGeneration(newGen);
                 index++;
@@ -43,7 +51,7 @@ namespace RobotGA_Project.GASolution
                 }
             }
             Console.WriteLine("COUNT:"+winnerCount);
-            return winnerCount >= Constants.PopulationSize / 10 || Generations.Count > 100;
+            return winnerCount >= Constants.PopulationSize / 5 || Generations.Count > 100;
         }
         
     }

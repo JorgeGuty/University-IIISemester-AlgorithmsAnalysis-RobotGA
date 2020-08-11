@@ -8,33 +8,39 @@ namespace RobotGA_Project.GASolution
         /*
          * Class that stores and manages the reproduction, mutation and fitness of a population.
          */
+        
+        public int Id { get; set; }
+        
         public List<Robot> Population { get; set; }
         public float FitnessAverage { get; set; }
         
-        public int BestFitness { get; set; }
-        
-        public int WorstFitness { get; set; }
+        public Robot BestRun { get; set; }
+        public Robot WorstRun { get; set; }
 
-        public Generation(List<Robot> pLastGeneration)
+        public Generation(List<Robot> pLastGeneration, int pId)
         {
             /*
              *  Initializes a population by breeding and mutating the last generation.
              */
             
+            Id = pId;
             Population = Breed(pLastGeneration);
             GenerationalMutation();
             FitGeneration();
         }
 
-        public Generation()
+        public Generation(int pId)
         {
             /*
              *  Initializes a random generation.
              */
+            
+            Id = pId;
+            
             Population = new List<Robot>();
             for (int size = 0; size < Constants.PopulationSize; size++)
             {
-                Population.Add(new Robot(size));
+                Population.Add(new Robot(size,Id));
             }
             FitGeneration();
         }
@@ -61,17 +67,21 @@ namespace RobotGA_Project.GASolution
 
         private void FitGeneration()
         {
-            
-            WorstFitness = Int32.MaxValue;
-            BestFitness = 0;
-            
             var fitnessList = new List<int>();
             foreach (var robot in Population)
             {
                 robot.CalculateFitness();
                 fitnessList.Add(robot.Fitness);
-                if (robot.Fitness > BestFitness) BestFitness = robot.Fitness;
-                if (robot.Fitness < WorstFitness) WorstFitness = robot.Fitness;
+                try
+                {
+                    if (robot.Fitness > BestRun.Fitness) BestRun = robot;
+                    if (robot.Fitness < WorstRun.Fitness) WorstRun = robot;
+                }
+                catch (Exception e)
+                {
+                    BestRun = robot;
+                    WorstRun = robot;
+                }
             }
             GeneticOperations.SetGenerationReproductionProbabilities(Population);
             FitnessAverage = MathematicalOperations.Average(fitnessList, fitnessList.Count);
@@ -136,8 +146,8 @@ namespace RobotGA_Project.GASolution
             int softwarePartitionIndex = 
                 MathematicalOperations.RandomIntegerInRange(1, Constants.SoftwareChromosomeSize);
             
-            Robot child1 = new Robot(pParentA, pParentB, hardwarePartitionIndex, softwarePartitionIndex, pId);
-            Robot child2 = new Robot(pParentB, pParentA, hardwarePartitionIndex, softwarePartitionIndex,pId + 1);
+            Robot child1 = new Robot(pParentA, pParentB, hardwarePartitionIndex, softwarePartitionIndex, pId, Id);
+            Robot child2 = new Robot(pParentB, pParentA, hardwarePartitionIndex, softwarePartitionIndex,pId + 1,Id);
 
             return (child1, child2);
         }

@@ -143,7 +143,7 @@ namespace RobotGA_Project.GASolution
 
         public static readonly int FitnessCriteriaQuantity = 5;
 
-        public static readonly int WinBonus = 300;
+        public static readonly int WinBonus = 25;
 
         public static readonly int MaxFinalDistancePossible =
             (int)MathematicalOperations.DistanceBetweenPoints(StartIndex, GoalIndex);
