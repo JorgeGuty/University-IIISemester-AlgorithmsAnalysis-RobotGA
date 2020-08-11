@@ -163,7 +163,7 @@ namespace RobotGA_Project.GASolution
             int wonFit = Constants.WinBonus;
             
             Fitness = distanceFit + nonRepeatedStepsFit + stepsFit + energyFit + costFit;
-            if (Won) Fitness *= wonFit;
+            if (Won) Fitness += wonFit;
             
         }
 

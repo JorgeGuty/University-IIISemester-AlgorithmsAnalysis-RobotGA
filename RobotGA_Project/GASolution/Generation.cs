@@ -10,6 +10,10 @@ namespace RobotGA_Project.GASolution
          */
         public List<Robot> Population { get; set; }
         public float FitnessAverage { get; set; }
+        
+        public int BestFitness { get; set; }
+        
+        public int WorstFitness { get; set; }
 
         public Generation(List<Robot> pLastGeneration)
         {
@@ -57,11 +61,17 @@ namespace RobotGA_Project.GASolution
 
         private void FitGeneration()
         {
+            
+            WorstFitness = Int32.MaxValue;
+            BestFitness = 0;
+            
             var fitnessList = new List<int>();
             foreach (var robot in Population)
             {
                 robot.CalculateFitness();
                 fitnessList.Add(robot.Fitness);
+                if (robot.Fitness > BestFitness) BestFitness = robot.Fitness;
+                if (robot.Fitness < WorstFitness) WorstFitness = robot.Fitness;
             }
             GeneticOperations.SetGenerationReproductionProbabilities(Population);
             FitnessAverage = MathematicalOperations.Average(fitnessList, fitnessList.Count);

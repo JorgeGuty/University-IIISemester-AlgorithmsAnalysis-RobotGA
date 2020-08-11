@@ -14,6 +14,14 @@ namespace RobotGA_Project.Models
         [Display(Name = "Fitness Average")]
         public float FitnessAverage { get; set; }
         
+        [Required] 
+        [Display(Name = "Worst Fitness")] 
+        public int WorstFitness { get; set; }
+        
+        [Required] 
+        [Display(Name = "Best Fitness")] 
+        public int BestFitness { get; set; }
+        
         [Required] public List<RobotModel> Population { get; set; }
         
         

@@ -23,7 +23,9 @@ namespace RobotGA_Project.Models.ModelControllers
             {
                 Id = pGenerationId,
                 Population = GenerateGenerationOfModels(pGeneration,pGenerationId),
-                FitnessAverage = pGeneration.FitnessAverage
+                FitnessAverage = pGeneration.FitnessAverage,
+                WorstFitness = pGeneration.WorstFitness,
+                BestFitness = pGeneration.BestFitness
             };
             return model;
         }

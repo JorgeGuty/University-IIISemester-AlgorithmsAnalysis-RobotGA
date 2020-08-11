@@ -162,7 +162,9 @@
     <Content Include="GASolution\Data Structures\MapStructures\MapFiles\map1.txt" />
     <Content Include="GASolution\Data Structures\MapStructures\MapFiles\map2.txt" />
     <Content Include="GASolution\Data Structures\MapStructures\MapFiles\map3.txt" />
+    <Content Include="GASolution\Data Structures\MapStructures\MapFiles\map5.txt" />
     <Content Include="GASolution\Data Structures\MapStructures\MapFiles\map4.txt" />
+    <Content Include="GASolution\Data Structures\MapStructures\MapFiles\map6.txt" />
     <Content Include="Global.asax" />
     <Content Include="Content\Site.css" />
     <Content Include="Scripts\bootstrap.js" />

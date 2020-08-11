@@ -75,7 +75,7 @@ namespace RobotGA_Project.GASolution
         // Engine Constants
 
         public static readonly int EngineTypeQuantity = 3;
-        public static readonly int EngineCostIncrement = 2;
+        public static readonly int EngineCostIncrement = 5;
         
         public static readonly int EngineMaxCost = (EngineTypeQuantity * EngineCostIncrement) + BasicCost;
         
@@ -115,9 +115,9 @@ namespace RobotGA_Project.GASolution
         // Battery Constants
         
         public static readonly int BatteryTypeQuantity = 3;
-        public static readonly int BasicEnergy = 30;
+        public static readonly int BasicEnergy = 50;
         public static readonly int EnergyIncrement = 10;
-        public static readonly int BatteryCostIncrement = 3;
+        public static readonly int BatteryCostIncrement = 4;
         
         public static readonly int BatteryMaxCost = (BatteryTypeQuantity * BatteryCostIncrement) + BasicCost;
         
@@ -135,15 +135,15 @@ namespace RobotGA_Project.GASolution
         
         // Fitness Constants
 
-        public static readonly int FIRST_PRIORITY_VALUE = 30;
+        public static readonly int FIRST_PRIORITY_VALUE = 40;
         public static readonly int SECOND_PRIORITY_VALUE = 10;
-        public static readonly int THIRD_PRIORITY_VALUE = 2;
-        public static readonly int FOURTH_PRIORITY_VALUE = 1;
+        public static readonly int THIRD_PRIORITY_VALUE = 5;
+        public static readonly int FOURTH_PRIORITY_VALUE = 2;
         public static readonly int LAST_PRIORITY_VALUE = 1;
 
         public static readonly int FitnessCriteriaQuantity = 5;
 
-        public static readonly int WinBonus = 20;
+        public static readonly int WinBonus = 300;
 
         public static readonly int MaxFinalDistancePossible =
             (int)MathematicalOperations.DistanceBetweenPoints(StartIndex, GoalIndex);

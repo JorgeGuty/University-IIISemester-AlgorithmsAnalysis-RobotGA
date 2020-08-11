@@ -55,6 +55,8 @@
               <e p="map2.txt" t="Include" />
               <e p="map3.txt" t="Include" />
               <e p="map4.txt" t="Include" />
+              <e p="map5.txt" t="Include" />
+              <e p="map6.txt" t="Include" />
             </e>
             <e p="MapLoader.cs" t="Include" />
           </e>
